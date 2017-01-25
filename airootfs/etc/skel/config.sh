@@ -8,7 +8,7 @@ hwclock --systohc --utc
 
 echo "+++ Enabling language and keymap... +++"
 sed -i "s/#\(${LANGUAGE}\.UTF-8\)/\1/" /etc/locale.gen
-echo "LANG=${LANGUAGE}es_CL.UTF-8" > /etc/locale.conf
+echo "LANG=${LANGUAGE}.UTF-8" > /etc/locale.conf
 echo "KEYMAP=la-latin1" > /etc/vconsole.conf
 locale-gen
 
