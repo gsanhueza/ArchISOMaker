@@ -8,6 +8,11 @@
 # Retrieved:  2016-06-09 00:56:41 UTC
 # Last Check: 2016-06-09 01:46:43 UTC
 
+# Most updated Servers
+#Server = http://mirror.f4st.host/archlinux/$repo/os/$arch
+#Server = https://mirror.f4st.host/archlinux/$repo/os/$arch
+
+# Fastest Servers
 Server = http://mirror.archlinux.cl/$repo/os/$arch
 Server = http://mirror.us.leaseweb.net/archlinux/$repo/os/$arch
 Server = http://mirror.es.its.nyu.edu/archlinux/$repo/os/$arch

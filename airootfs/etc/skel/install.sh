@@ -36,7 +36,7 @@ then
 fi
 
 # Installing here
-pacstrap /mnt $PACKAGES --cachedir=/root/pkg
+pacstrap /mnt $PACKAGES --cachedir=/root/pkg --needed
 
 genfstab -p -U /mnt > /mnt/etc/fstab
 cp pacman_config_when_installed/pacman.conf /mnt/etc/pacman.conf -v
@@ -49,6 +49,10 @@ echo ""
 echo "*** Now configuring your system with ${DESKTOP_ENV}, ${BOOTLOADER} and ${XORG_DRIVERS}... ***"
 arch-chroot /mnt /bin/zsh -c "cd && ./config.sh && rm config.sh env.sh -f"
 umount -R /mnt
+
+echo ""
+echo "*** Syncing drives ***"
+sync
 
 for i in 0 1 2 
 do
