@@ -36,7 +36,7 @@ then
 fi
 
 # Installing here
-pacstrap /mnt $PACKAGES --cachedir=/root/pkg
+pacstrap /mnt $PACKAGES --cachedir=/root/pkg --needed
 
 genfstab -p -U /mnt > /mnt/etc/fstab
 cp pacman_config_when_installed/pacman.conf /mnt/etc/pacman.conf -v
