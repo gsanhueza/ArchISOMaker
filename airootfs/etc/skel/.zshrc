@@ -1,7 +1,7 @@
 echo "Welcome to Gabriel's Custom Arch ISO!"
 echo ""
 echo "You can start an Openbox display just by executing \"startx\"."
-echo "From there, you just have type \"Super + D\" to allow execution of \"gparted\", or \"Super + Enter\" to execute a terminal session."
+echo "From there, \"Super + D\" to open menu (to execute \"gparted\"), or \"Super + Enter\" to execute a terminal session."
 echo "For a latinamerican keyboard execute \"setxkbmap latam\"."
 echo ""
 echo "Remember to:"
