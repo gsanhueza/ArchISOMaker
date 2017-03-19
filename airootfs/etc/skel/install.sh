@@ -1,6 +1,6 @@
 source $PWD/env.sh
 
-PACKAGES="base base-devel yaourt vim grml-zsh-config gstreamer smplayer mplayer xorg-server cantarell-fonts xorg-xinit xf86-input-libinput intel-ucode"
+PACKAGES="base base-devel yaourt vim grml-zsh-config gstreamer smplayer mplayer xorg-server cantarell-fonts xorg-xinit xf86-input-libinput intel-ucode alsa-utils"
 
 # KDE vs GNOME
 echo "*** Installing ${DESKTOP_ENV}... ***"
@@ -12,7 +12,7 @@ then
 	PACKAGES="$PACKAGES gnome gnome-tweak-tool"
 elif [ $DESKTOP_ENV == "i3" ] 
 then
-	PACKAGES="$PACKAGES i3 dmenu xterm feh lynx lxdm-gtk3 compton network-manager-applet"
+	PACKAGES="$PACKAGES i3 dmenu xterm feh lynx lxdm-gtk3 compton network-manager-applet networkmanager"
 fi
 
 # rEFInd vs GRUB
