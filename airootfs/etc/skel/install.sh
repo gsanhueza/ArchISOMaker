@@ -12,7 +12,7 @@ then
 	PACKAGES="$PACKAGES gnome gnome-tweak-tool"
 elif [ $DESKTOP_ENV == "i3" ] 
 then
-	PACKAGES="$PACKAGES i3 dmenu feh lynx lxdm-gtk3 compton network-manager-applet"
+	PACKAGES="$PACKAGES i3 dmenu xterm feh lynx lxdm-gtk3 compton network-manager-applet"
 fi
 
 # rEFInd vs GRUB
