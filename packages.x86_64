@@ -68,7 +68,8 @@ xorg
 xorg-xinit
 xorg-drivers
 xterm
-openbox
+i3
+dmenu
 gparted
 virtualbox-guest-modules-arch
 virtualbox-guest-utils

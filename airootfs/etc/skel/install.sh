@@ -10,6 +10,9 @@ then
 elif [ $DESKTOP_ENV == "GNOME" ] 
 then
 	PACKAGES="$PACKAGES gnome gnome-tweak-tool"
+elif [ $DESKTOP_ENV == "i3" ] 
+then
+	PACKAGES="$PACKAGES i3 dmenu feh lynx lxdm-gtk3"
 fi
 
 # rEFInd vs GRUB

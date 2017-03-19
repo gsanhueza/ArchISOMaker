@@ -1,1 +1,1 @@
-exec openbox
+exec i3 
