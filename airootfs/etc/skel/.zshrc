@@ -1,6 +1,6 @@
 echo "Welcome to Gabriel's Custom Arch ISO!"
 echo ""
-echo "You can start an Openbox display just by executing \"startx\"."
+echo "You can start an i3 graphical display just by executing \"startx\"."
 echo "\"Super + D\" to open menu (to execute \"gparted\")."
 echo "\"Super + Enter\" to execute a terminal session."
 echo ""
