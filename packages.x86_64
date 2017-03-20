@@ -70,6 +70,7 @@ xorg-drivers
 xterm
 i3
 dmenu
+feh
 gparted
 virtualbox-guest-modules-arch
 virtualbox-guest-utils

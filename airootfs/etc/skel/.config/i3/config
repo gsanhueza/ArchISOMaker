@@ -156,3 +156,5 @@ bar {
 }
 
 exec setxkbmap latam
+exec --no-startup-id feh --bg-scale "/root/.instructionsgui.png"
+
