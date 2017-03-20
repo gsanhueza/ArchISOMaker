@@ -70,7 +70,6 @@ xorg-drivers
 xterm
 i3
 dmenu
-network-manager-applet
 gparted
 virtualbox-guest-modules-arch
 virtualbox-guest-utils
