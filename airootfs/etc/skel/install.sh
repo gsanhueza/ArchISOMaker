@@ -1,6 +1,6 @@
 source $PWD/env.sh
 
-PACKAGES="base base-devel yaourt vim grml-zsh-config gstreamer smplayer mplayer xorg-server cantarell-fonts xorg-xinit xf86-input-libinput intel-ucode alsa-utils"
+PACKAGES="base base-devel yaourt vim grml-zsh-config gstreamer smplayer xorg-server cantarell-fonts xorg-xinit xf86-input-libinput intel-ucode alsa-utils"
 
 # KDE vs GNOME
 echo "*** Installing ${DESKTOP_ENV}... ***"
