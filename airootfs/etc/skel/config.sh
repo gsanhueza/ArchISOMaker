@@ -58,7 +58,7 @@ then
 	grub-mkconfig -o /boot/grub/grub.cfg
 elif [ $BOOTLOADER == "refind" ]
 then
-	mkdir /boot/EFI/refind # Mini-hack
+	mkdir -p /boot/EFI/refind # Mini-hack
 	refind-install
 	REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
 	echo "\"Boot with standard options\"        \"rw root=${REFIND_UUID} initrd=/intel-ucode.img initrd=/initramfs-linux.img rcutree.rcu_idle_gp_delay=1 acpi_osi= acpi_backlight=native splash\"" > /boot/refind_linux.conf
