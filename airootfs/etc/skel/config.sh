@@ -26,9 +26,6 @@ then
 elif [ $DESKTOP_ENV == "GNOME" ]
 then
 	systemctl enable gdm.service
-elif [ $DESKTOP_ENV == "i3" ]
-then
-	systemctl enable lxdm.service
 fi
 
 echo ""

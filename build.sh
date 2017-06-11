@@ -248,22 +248,16 @@ mkdir -p ${work_dir}
 
 run_once make_pacman_conf
 
-# Do all stuff for each airootfs
-for arch in x86_64; do
-    run_once make_basefs
-    run_once make_packages
-done
+# Do all initial stuff 
+run_once make_basefs
+run_once make_packages
 
 run_once make_packages_efi
 
-for arch in x86_64; do
-    run_once make_setup_mkinitcpio
-    run_once make_customize_airootfs
-done
+run_once make_setup_mkinitcpio
+run_once make_customize_airootfs
 
-for arch in x86_64; do
-    run_once make_boot
-done
+run_once make_boot
 
 # Do all stuff for "iso"
 run_once make_boot_extra
@@ -272,8 +266,6 @@ run_once make_isolinux
 run_once make_efi
 run_once make_efiboot
 
-for arch in x86_64; do
-    run_once make_prepare
-done
+run_once make_prepare
 
 run_once make_iso

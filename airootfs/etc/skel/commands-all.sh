@@ -10,8 +10,8 @@ mkdir -m 0755 -p "$newroot"/var/{cache/pacman/pkg,lib/pacman,log} "$newroot"/{de
 mkdir -m 1777 -p "$newroot"/tmp
 mkdir -m 0555 -p "$newroot"/{sys,proc}
 
-# Pull packages
-pacman -Syw --root /mnt --cachedir /mnt/var/cache/pacman/pkg --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode i3 dmenu feh lxdm-gtk3 lynx compton xterm pcmanfm-gtk3 alsa-utils
+# Pull packages from the Internet
+pacman -Syw --root /mnt --cachedir /mnt/var/cache/pacman/pkg --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
 
 # Copy packages to /media
 echo ""
