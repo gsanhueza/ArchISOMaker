@@ -269,3 +269,10 @@ run_once make_efiboot
 run_once make_prepare
 
 run_once make_iso
+
+# Once ready, do a clean-up
+rm work/ -rf
+
+# Move ISO from out folder
+mv out/* ..
+
