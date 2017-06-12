@@ -1,7 +1,7 @@
 # Copy mirror file and pacman configuration
 echo "*** Installing packages from remote repos... ***"
-cp /root/pacman_config_when_installed/pacman.conf /etc/pacman.conf -v
-cp /root/pacman_config_when_installed/mirrorlist /etc/pacman.d/mirrorlist -v
+cp /root/pacman_on_install.conf /etc/pacman.conf -v
+cp /root/mirrorlist /etc/pacman.d/mirrorlist -v
 
 # Create obligatory directories
 newroot=/mnt
@@ -15,7 +15,7 @@ mkdir -m 0555 -p "$newroot"/{sys,proc}
 # Pull packages from the Internet
 pacman -Syw --root "$newroot" --cachedir "$newroot"/var/cache/pacman/pkg --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
 
-# Copy packages to ${pkgdb} 
+# Copy packages to ${pkgdb}
 echo ""
 echo "*** Creating DB for all packages in ${pkgdb} ***"
 mkdir -p "$pkgdb"
@@ -31,4 +31,3 @@ sync
 
 echo ""
 echo "*** Local repo is ready! ***"
-
