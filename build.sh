@@ -231,18 +231,23 @@ make_local_repo() {
         mkdir -m 0555 -p "$newroot"/{sys,proc}
     fi
 
-    # Consistency check for pkgdb
-    if [[ -e "$pkgdb" ]] && [[ -e "lock_pkgdb" ]]; then
-        rm -r "$pkgdb/custom.*"
-        rm "lock_pkgdb"
-    fi
-
     # Pull packages from the Internet if needed
-    if [[ ! -e "$pkgdb" ]]; then
-        touch "lock_pkgdb"
+    if [[ ! -e "$pkgdb" ]] || [[ -e "pkgdl.lock" ]] || [[ -e "pkgdb.lock" ]]; then
+        if [[ ! -e "$pkgdb" ]]; then
+            mkdir -p "$pkgdb"
+        fi
+        touch "pkgdl.lock"
 
-        mkdir -p "$pkgdb"
         pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
+
+        rm "pkgdl.lock"
+
+        # DB Consistency Check
+        if [[ -e "pkgdb.lock" ]]; then
+            rm "$pkgdb/custom.*"
+            rm "pkgdb.lock"
+        fi
+        touch "pkgdb.lock"
 
         # Create DB
         echo ""
@@ -250,7 +255,7 @@ make_local_repo() {
         repo-add "$pkgdb"/custom.db.tar.gz "$pkgdb"/*.xz
         sync
 
-        rm "lock_pkgdb"
+        rm "pkgdb.lock"
     fi
 
     echo ""
