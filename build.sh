@@ -225,7 +225,7 @@ make_local_repo() {
     # Make root directory
     if [[ ! -e "$newroot" ]]; then
         mkdir -p "$newroot"
-        echo "Creating install root at ${newroot}"
+        echo "Creating temporal install root at ${newroot}"
         mkdir -m 0755 -p "$newroot"/var/{cache/pacman/pkg,lib/pacman,log} "$newroot"/{dev,run,etc}
         mkdir -m 1777 -p "$newroot"/tmp
         mkdir -m 0555 -p "$newroot"/{sys,proc}
