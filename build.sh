@@ -216,6 +216,47 @@ make_iso() {
     mkarchiso ${verbose} -w "${work_dir}" -D "${install_dir}" -L "${iso_label}" -o "${out_dir}" iso "${iso_name}-${iso_version}-custom.iso"
 }
 
+# Make local pkg database and repo
+make_local_repo() {
+    # Create obligatory directories
+    newroot="$pwd"/tempmnt
+    pkgdb="$pwd"/airootfs/etc/skel/pkg
+
+    mkdir -p "$newroot"
+    mkdir -p "$pkgdb"
+
+    echo "Creating install root at ${newroot}"
+    mkdir -m 0755 -p "$newroot"/var/{cache/pacman/pkg,lib/pacman,log} "$newroot"/{dev,run,etc}
+    mkdir -m 1777 -p "$newroot"/tmp
+    mkdir -m 0555 -p "$newroot"/{sys,proc}
+
+    # Pull packages from the Internet
+    pacman -Syw --root "$newroot" --cachedir "$newroot"/var/cache/pacman/pkg --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
+
+    # Copy packages to ${pkgdb}
+    echo ""
+    echo "*** Creating DB for all packages in ${pkgdb} ***"
+
+    cp "$newroot"/var/cache/pacman/pkg/* "$pkgdb"
+    echo "*** Syncing... ***"
+    sync
+
+    # Create DB for packages in ${pkgdb}
+    echo "*** Creating new local DB... ***"
+    repo-add "$pkgdb"/custom.db.tar.gz "$pkgdb"/*.xz
+    sync
+
+    echo ""
+    echo "*** Local repo is ready! ***"
+}
+
+# Clean-up
+clean_up() {
+    rm work/ -rf
+    rm tempmnt/ -rf
+    mv out/* ..
+}
+
 if [[ ${EUID} -ne 0 ]]; then
     echo "This script must be run as root."
     _usage 1
@@ -247,6 +288,8 @@ done
 mkdir -p ${work_dir}
 
 #### Main script ####
+run_once make_local_repo
+
 run_once make_pacman_conf
 
 # Do all initial stuff
@@ -269,11 +312,8 @@ run_once make_efiboot
 
 run_once make_prepare
 
+# Create ISO
 run_once make_iso
 
-# Once ready, do a clean-up
-rm work/ -rf
-
-# Move ISO from out folder
-mv out/* ..
-
+# Run clean-up routine
+run_once clean_up
