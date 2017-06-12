@@ -232,7 +232,9 @@ make_local_repo() {
     fi
 
     # Pull packages from the Internet if needed
-    if [[ ! -e "$pkgdb" ]] || [[ -e "pkgdl.lock" ]] || [[ -e "pkgdb.lock" ]]; then
+    if [[ ! -e "$pkgdb" ]] || [[ -e "repo.lock" ]] || [[ -e "pkgdl.lock" ]] || [[ -e "pkgdb.lock" ]]; then
+        touch "repo.lock"
+
         if [[ ! -e "$pkgdb" ]]; then
             mkdir -p "$pkgdb"
         fi
@@ -256,6 +258,8 @@ make_local_repo() {
         sync
 
         rm "pkgdb.lock"
+
+        rm "repo.lock"
     fi
 
     echo ""
