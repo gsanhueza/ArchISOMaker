@@ -222,29 +222,26 @@ make_local_repo() {
     newroot="$pwd"/tempmnt
     pkgdb="$pwd"/airootfs/etc/skel/pkg
 
-    mkdir -p "$newroot"
-    mkdir -p "$pkgdb"
+    if [[ ! -e "$newroot" ]]; then
+        mkdir -p "$newroot"
+    fi
 
     echo "Creating install root at ${newroot}"
     mkdir -m 0755 -p "$newroot"/var/{cache/pacman/pkg,lib/pacman,log} "$newroot"/{dev,run,etc}
     mkdir -m 1777 -p "$newroot"/tmp
     mkdir -m 0555 -p "$newroot"/{sys,proc}
 
-    # Pull packages from the Internet
-    pacman -Syw --root "$newroot" --cachedir "$newroot"/var/cache/pacman/pkg --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
+    # Pull packages from the Internet if needed
+    if [[ ! -e "$pkgdb" ]]; then
+        mkdir -p "$pkgdb"
+        pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
 
-    # Copy packages to ${pkgdb}
-    echo ""
-    echo "*** Creating DB for all packages in ${pkgdb} ***"
-
-    cp "$newroot"/var/cache/pacman/pkg/* "$pkgdb"
-    echo "*** Syncing... ***"
-    sync
-
-    # Create DB for packages in ${pkgdb}
-    echo "*** Creating new local DB... ***"
-    repo-add "$pkgdb"/custom.db.tar.gz "$pkgdb"/*.xz
-    sync
+        # Create DB
+        echo ""
+        echo "*** Creating DB for all packages in ${pkgdb} ***"
+        repo-add "$pkgdb"/custom.db.tar.gz "$pkgdb"/*.xz
+        sync
+    fi
 
     echo ""
     echo "*** Local repo is ready! ***"
@@ -315,5 +312,5 @@ run_once make_prepare
 # Create ISO
 run_once make_iso
 
-# Run clean-up routine
+# Clean-up routine
 run_once clean_up
