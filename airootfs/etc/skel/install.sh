@@ -42,8 +42,8 @@ genfstab -p -U /mnt > /mnt/etc/fstab
 cp /root/pacman_on_install.conf /mnt/etc/pacman.conf -v
 cp /root/mirrorlist /mnt/etc/pacman.d/mirrorlist -v
 
-cp $PWD/env.sh /mnt/root -v
-cp $PWD/config.sh /mnt/root -v
+cp /root/env.sh /mnt/root -v
+cp /root/config.sh /mnt/root -v
 
 echo ""
 echo "*** Now configuring your system with ${DESKTOP_ENV}, ${BOOTLOADER} and ${XORG_DRIVERS}... ***"

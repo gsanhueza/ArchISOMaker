@@ -224,12 +224,11 @@ make_local_repo() {
 
     if [[ ! -e "$newroot" ]]; then
         mkdir -p "$newroot"
+        echo "Creating install root at ${newroot}"
+        mkdir -m 0755 -p "$newroot"/var/{cache/pacman/pkg,lib/pacman,log} "$newroot"/{dev,run,etc}
+        mkdir -m 1777 -p "$newroot"/tmp
+        mkdir -m 0555 -p "$newroot"/{sys,proc}
     fi
-
-    echo "Creating install root at ${newroot}"
-    mkdir -m 0755 -p "$newroot"/var/{cache/pacman/pkg,lib/pacman,log} "$newroot"/{dev,run,etc}
-    mkdir -m 1777 -p "$newroot"/tmp
-    mkdir -m 0555 -p "$newroot"/{sys,proc}
 
     # Pull packages from the Internet if needed
     if [[ ! -e "$pkgdb" ]]; then
@@ -238,7 +237,7 @@ make_local_repo() {
 
         # Create DB
         echo ""
-        echo "*** Creating DB for all packages in ${pkgdb} ***"
+        echo "Creating DB for all packages in ${pkgdb}"
         repo-add "$pkgdb"/custom.db.tar.gz "$pkgdb"/*.xz
         sync
     fi
