@@ -145,7 +145,7 @@ customize_env() {
 
     # Xorg Drivers
     echo "Choose your Graphic Drivers (default=nvidia)"
-    printf "(*1) nvidia    (2) amd    (3) vbox    (4) intel"
+    printf "(*1) nvidia    (2) amd    (3) vbox    (4) intel: "
     read ans
     case $ans in
         ''|'1')
@@ -184,11 +184,11 @@ case $inst in
         printf "Do you want to use defaults? (Y/n): "
         read defaults
         case $defaults in
-            'n'|'N')
-                customize_env
-            ;;
             ''|'y'|'Y')
                 source $PWD/env.sh
+            ;;
+            *)
+                customize_env
             ;;
         esac
         install_system
