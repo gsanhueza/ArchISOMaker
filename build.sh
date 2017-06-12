@@ -332,4 +332,4 @@ run_once make_prepare
 run_once make_iso
 
 # Clean-up routine
-run_once clean_up
+clean_up
