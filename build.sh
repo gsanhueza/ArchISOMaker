@@ -222,23 +222,13 @@ make_local_repo() {
     newroot="$(pwd)"/TEMPMNT
     pkgdb="$(pwd)"/airootfs/etc/skel/pkg
 
-    # Consistency check for newroot
-    if [[ -e "$newroot" ]] && [[ -e "lock_newroot" ]]; then
-        rm -r "$newroot"
-        rm "lock_newroot"
-    fi
-
-    # Make directory
+    # Make root directory
     if [[ ! -e "$newroot" ]]; then
-        touch "lock_newroot"
-
         mkdir -p "$newroot"
         echo "Creating install root at ${newroot}"
         mkdir -m 0755 -p "$newroot"/var/{cache/pacman/pkg,lib/pacman,log} "$newroot"/{dev,run,etc}
         mkdir -m 1777 -p "$newroot"/tmp
         mkdir -m 0555 -p "$newroot"/{sys,proc}
-
-        rm "lock_newroot"
     fi
 
     # Consistency check for pkgdb
@@ -317,10 +307,10 @@ run_once make_packages_efi
 
 run_once make_setup_mkinitcpio
 run_once make_customize_airootfs
-
 run_once make_boot
 
 # Do all stuff for "iso"
+
 run_once make_boot_extra
 run_once make_syslinux
 run_once make_isolinux
