@@ -59,7 +59,7 @@ make_basefs() {
 
 # Additional packages (airootfs)
 make_packages() {
-    setarch ${arch} mkarchiso ${verbose} -w "${work_dir}/${arch}" -C "${work_dir}/pacman.conf" -D "${install_dir}" -p "$(grep -h -v ^# ${script_path}/packages.{both,${arch}})" install
+    setarch ${arch} mkarchiso ${verbose} -w "${work_dir}/${arch}" -C "${work_dir}/pacman.conf" -D "${install_dir}" -p "$(grep -h -v ^# ${script_path}/packages.${arch})" install
 }
 
 # Needed packages for x86_64 EFI boot
@@ -216,6 +216,63 @@ make_iso() {
     mkarchiso ${verbose} -w "${work_dir}" -D "${install_dir}" -L "${iso_label}" -o "${out_dir}" iso "${iso_name}-${iso_version}-custom.iso"
 }
 
+# Make local pkg database and repo
+make_local_repo() {
+    # Create obligatory directories
+    newroot="$(pwd)"/TEMPMNT
+    pkgdb="$(pwd)"/airootfs/etc/skel/pkg
+
+    # Make root directory
+    if [[ ! -e "$newroot" ]]; then
+        mkdir -p "$newroot"
+        echo "Creating temporal install root at ${newroot}"
+        mkdir -m 0755 -p "$newroot"/var/{cache/pacman/pkg,lib/pacman,log} "$newroot"/{dev,run,etc}
+        mkdir -m 1777 -p "$newroot"/tmp
+        mkdir -m 0555 -p "$newroot"/{sys,proc}
+    fi
+
+    # Pull packages from the Internet if needed
+    if [[ ! -e "$pkgdb" ]] || [[ -e "repo.lock" ]] || [[ -e "pkgdl.lock" ]] || [[ -e "pkgdb.lock" ]]; then
+        touch "repo.lock"
+
+        if [[ ! -e "$pkgdb" ]]; then
+            mkdir -p "$pkgdb"
+        fi
+        touch "pkgdl.lock"
+
+        pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
+
+        rm "pkgdl.lock"
+
+        # DB Consistency Check
+        if [[ -e "pkgdb.lock" ]]; then
+            rm "$pkgdb/custom.*"
+            rm "pkgdb.lock"
+        fi
+        touch "pkgdb.lock"
+
+        # Create DB
+        echo ""
+        echo "Creating DB for all packages in ${pkgdb}"
+        repo-add "$pkgdb"/custom.db.tar.gz "$pkgdb"/*.xz
+        sync
+
+        rm "pkgdb.lock"
+
+        rm "repo.lock"
+    fi
+
+    echo ""
+    echo "*** Local repo is ready! ***"
+}
+
+# Clean-up
+clean_up() {
+    rm work/ -rf
+    rm TEMPMNT/ -rf
+    mv out/* ..
+}
+
 if [[ ${EUID} -ne 0 ]]; then
     echo "This script must be run as root."
     _usage 1
@@ -246,9 +303,12 @@ done
 
 mkdir -p ${work_dir}
 
+#### Main script ####
+run_once make_local_repo
+
 run_once make_pacman_conf
 
-# Do all initial stuff 
+# Do all initial stuff
 run_once make_basefs
 run_once make_packages
 
@@ -256,10 +316,10 @@ run_once make_packages_efi
 
 run_once make_setup_mkinitcpio
 run_once make_customize_airootfs
-
 run_once make_boot
 
 # Do all stuff for "iso"
+
 run_once make_boot_extra
 run_once make_syslinux
 run_once make_isolinux
@@ -268,11 +328,8 @@ run_once make_efiboot
 
 run_once make_prepare
 
+# Create ISO
 run_once make_iso
 
-# Once ready, do a clean-up
-rm work/ -rf
-
-# Move ISO from out folder
-mv out/* ..
-
+# Clean-up routine
+run_once clean_up

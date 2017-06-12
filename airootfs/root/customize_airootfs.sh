@@ -11,7 +11,7 @@ ln -sf /usr/share/zoneinfo/America/Santiago /etc/localtime
 
 usermod -s /usr/bin/zsh root
 cp -aT /etc/skel/ /root/
-mv /root/pacman.conf /etc/pacman.conf
+mv /root/pacman_on_iso.conf /etc/pacman.conf
 chmod 700 /root
 
 sed -i 's/#\(PermitRootLogin \).\+/\1yes/' /etc/ssh/sshd_config
