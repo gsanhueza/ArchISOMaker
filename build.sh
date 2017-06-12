@@ -222,16 +222,35 @@ make_local_repo() {
     newroot="$(pwd)"/TEMPMNT
     pkgdb="$(pwd)"/airootfs/etc/skel/pkg
 
+    # Consistency check for newroot
+    if [[ -e "$newroot" ]] && [[ -e "lock_newroot" ]]; then
+        rm -r "$newroot"
+        rm "lock_newroot"
+    fi
+
+    # Make directory
     if [[ ! -e "$newroot" ]]; then
+        touch "lock_newroot"
+
         mkdir -p "$newroot"
         echo "Creating install root at ${newroot}"
         mkdir -m 0755 -p "$newroot"/var/{cache/pacman/pkg,lib/pacman,log} "$newroot"/{dev,run,etc}
         mkdir -m 1777 -p "$newroot"/tmp
         mkdir -m 0555 -p "$newroot"/{sys,proc}
+
+        rm "lock_newroot"
+    fi
+
+    # Consistency check for pkgdb
+    if [[ -e "$pkgdb" ]] && [[ -e "lock_pkgdb" ]]; then
+        rm -r "$pkgdb"
+        rm "lock_pkgdb"
     fi
 
     # Pull packages from the Internet if needed
     if [[ ! -e "$pkgdb" ]]; then
+        touch "lock_pkgdb"
+
         mkdir -p "$pkgdb"
         pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
 
@@ -240,6 +259,8 @@ make_local_repo() {
         echo "Creating DB for all packages in ${pkgdb}"
         repo-add "$pkgdb"/custom.db.tar.gz "$pkgdb"/*.xz
         sync
+
+        rm "lock_pkgdb"
     fi
 
     echo ""
