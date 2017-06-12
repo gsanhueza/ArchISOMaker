@@ -232,33 +232,27 @@ make_local_repo() {
     fi
 
     # Pull packages from the Internet if needed
-    if [[ ! -e "$pkgdb" ]] || [[ -e "repo.lock" ]] || [[ -e "pkgdl.lock" ]] || [[ -e "pkgdb.lock" ]]; then
+    if [[ ! -e "$pkgdb" || -e "repo.lock" || -e "pkgdl.lock" || -e "pkgdb.lock" ]]; then
         touch "repo.lock"
 
         if [[ ! -e "$pkgdb" ]]; then
             mkdir -p "$pkgdb"
         fi
-        touch "pkgdl.lock"
 
-        pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
-
-        rm "pkgdl.lock"
-
-        # DB Consistency Check
-        if [[ -e "pkgdb.lock" ]]; then
-            rm "$pkgdb/custom.*"
-            rm "pkgdb.lock"
+        if [[ ! -e "pkgdb.lock" || ! -e "pkgdl.lock" ]]; then
+            touch "pkgdl.lock"
+            pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
         fi
-        touch "pkgdb.lock"
 
         # Create DB
         echo ""
         echo "Creating DB for all packages in ${pkgdb}"
+        touch "pkgdb.lock"
         repo-add "$pkgdb"/custom.db.tar.gz "$pkgdb"/*.xz
         sync
 
+        rm "pkgdl.lock"
         rm "pkgdb.lock"
-
         rm "repo.lock"
     fi
 
