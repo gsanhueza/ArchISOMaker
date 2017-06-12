@@ -65,12 +65,8 @@ install_system() {
 }
 
 customize_env() {
-    LANGUAGE="es_CL"
-    DESKTOP_ENV="KDE" # KDE, GNOME
-    BOOTLOADER="refind" # refind, grub
-    XORG_DRIVERS="nvidia" # nvidia, amd, vbox
-
-    echo "I'll now ask for data needed to install your system. If you leave it blank, it will just use defaults. (See env.sh)."
+    echo "I'll now ask for data needed to install your system."
+    echo "If you leave it blank, it will just use defaults. (See env.sh)."
     echo ""
 
     # Name
@@ -197,3 +193,4 @@ case $inst in
         echo "Re-run 'install.sh' to install your system."
     ;;
 esac
+
