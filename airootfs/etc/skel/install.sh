@@ -122,7 +122,7 @@ customize_env() {
         ;;
         *)
             echo "Wrong choice, halting now!"
-            exit(1)
+            exit 1
         ;;
     esac
 
@@ -139,7 +139,7 @@ customize_env() {
         ;;
         *)
             echo "Wrong choice, halting now!"
-            exit(1)
+            exit 1
         ;;
     esac
 
@@ -162,7 +162,7 @@ customize_env() {
         ;;
         *)
             echo "Wrong choice, halting now!"
-            exit(1)
+            exit 1
         ;;
     esac
 
