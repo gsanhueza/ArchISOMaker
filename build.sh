@@ -219,8 +219,8 @@ make_iso() {
 # Make local pkg database and repo
 make_local_repo() {
     # Create obligatory directories
-    newroot="$pwd"/tempmnt
-    pkgdb="$pwd"/airootfs/etc/skel/pkg
+    newroot="$(pwd)"/TEMPMNT
+    pkgdb="$(pwd)"/airootfs/etc/skel/pkg
 
     if [[ ! -e "$newroot" ]]; then
         mkdir -p "$newroot"
@@ -250,7 +250,7 @@ make_local_repo() {
 # Clean-up
 clean_up() {
     rm work/ -rf
-    rm tempmnt/ -rf
+    rm TEMPMNT/ -rf
     mv out/* ..
 }
 
