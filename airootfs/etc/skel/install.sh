@@ -38,7 +38,7 @@ install_system() {
     pacstrap /mnt $PACKAGES --cachedir=/root/pkg --needed
 
     genfstab -p -U /mnt > /mnt/etc/fstab
-    cp /root/pacman_on_install.conf /mnt/etc/pacman.conf -v
+    cp /root/pacman_on_installation.conf /mnt/etc/pacman.conf -v
     cp /root/mirrorlist /mnt/etc/pacman.d/mirrorlist -v
 
     cp /root/env.sh /mnt/root -v
