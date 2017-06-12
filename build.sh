@@ -233,7 +233,7 @@ make_local_repo() {
 
     # Consistency check for pkgdb
     if [[ -e "$pkgdb" ]] && [[ -e "lock_pkgdb" ]]; then
-        rm -r "$pkgdb"
+        rm -r "$pkgdb/custom.*"
         rm "lock_pkgdb"
     fi
 
