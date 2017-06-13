@@ -108,11 +108,14 @@ customize_env() {
     esac
 
     # Desktop environment
-    echo "Choose your Desktop Environment (default=KDE)"
+    echo "Choose your Desktop Environment (default=${DESKTOP_ENV})"
     printf "(1) KDE    (2) GNOME: "
     read ans
     case $ans in
-        ''|'1')
+        '')
+            DESKTOP_ENV="${DESKTOP_ENV}"
+        ;;
+        '1')
             DESKTOP_ENV="KDE"
         ;;
         '2')
@@ -125,11 +128,14 @@ customize_env() {
     esac
 
     # Bootloader
-    echo "Choose your Bootloader (default=rEFInd)"
+    echo "Choose your Bootloader (default=${BOOTLOADER})"
     printf "(1) rEFInd    (2) GRUB: "
     read ans
     case $ans in
-        ''|'1')
+        '')
+            BOOTLOADER="${BOOTLOADER}"
+        ;;
+        '1')
             BOOTLOADER="refind"
         ;;
         '2')
@@ -142,11 +148,14 @@ customize_env() {
     esac
 
     # Xorg Drivers
-    echo "Choose your Graphic Drivers (default=nvidia)"
+    echo "Choose your Graphic Drivers (default=${XORG_DRIVERS})"
     printf "(1) nVidia    (2) AMD    (3) VBox    (4) Intel: "
     read ans
     case $ans in
-        ''|'1')
+        '')
+            XORG_DRIVERS="${XORG_DRIVERS}"
+        ;;
+        '1')
             XORG_DRIVERS="nvidia"
         ;;
         '2')
