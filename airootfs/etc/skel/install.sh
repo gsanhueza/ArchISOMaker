@@ -65,16 +65,18 @@ install_system() {
 }
 
 customize_env() {
+    source /root/env.sh
+
     echo "I'll now ask for data needed to install your system."
     echo "If you leave it blank, it will just use defaults. (See env.sh)."
     echo ""
 
     # Name
-    printf "Write your name (default=gabriel): "
+    printf "Write your name (default=${USERNAME}): "
     read ans
     case $ans in
         '')
-            USERNAME="gabriel"
+            USERNAME="${USERNAME}"
         ;;
         *)
             USERNAME=$ans
@@ -82,11 +84,11 @@ customize_env() {
     esac
 
     # Hostname
-    printf "Write your hostname (default=linux-pc): "
+    printf "Write your hostname (default=${HOSTNAME}): "
     read ans
     case $ans in
         '')
-            HOSTNAME="linux-pc"
+            HOSTNAME="${HOSTNAME}"
         ;;
         *)
             HOSTNAME=$ans
@@ -94,11 +96,11 @@ customize_env() {
     esac
 
     # Language
-    printf "Write your chosen language (default=es_CL): "
+    printf "Write your chosen language (default=${LANGUAGE}): "
     read ans
     case $ans in
         '')
-            LANGUAGE="es_CL"
+            LANGUAGE="${LANGUAGE}"
         ;;
         *)
             LANGUAGE=$ans
@@ -107,7 +109,7 @@ customize_env() {
 
     # Desktop environment
     echo "Choose your Desktop Environment (default=KDE)"
-    printf "(*1) KDE    (2) GNOME: "
+    printf "(1) KDE    (2) GNOME: "
     read ans
     case $ans in
         ''|'1')
@@ -124,7 +126,7 @@ customize_env() {
 
     # Bootloader
     echo "Choose your Bootloader (default=rEFInd)"
-    printf "(*1) rEFInd    (2) Grub: "
+    printf "(1) rEFInd    (2) GRUB: "
     read ans
     case $ans in
         ''|'1')
@@ -141,7 +143,7 @@ customize_env() {
 
     # Xorg Drivers
     echo "Choose your Graphic Drivers (default=nvidia)"
-    printf "(*1) nvidia    (2) amd    (3) vbox    (4) intel: "
+    printf "(1) nVidia    (2) AMD    (3) VBox    (4) Intel: "
     read ans
     case $ans in
         ''|'1')
@@ -182,7 +184,7 @@ case $inst in
         printf "Do you want to use defaults? (Y/n): "
         read defaults
         case $defaults in
-            ''|'n'|'N')
+            'n'|'N')
                 customize_env
             ;;
         esac
