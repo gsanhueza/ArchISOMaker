@@ -162,12 +162,14 @@ customize_env() {
         ;;
     esac
 
-    export USERNAME
-    export HOSTNAME
-    export LANGUAGE
-    export DESKTOP_ENV
-    export BOOTLOADER
-    export XORG_DRIVERS
+    echo '' > /root/env.sh
+
+    echo "export USERNAME=${USERNAME}" >> /root/env.sh
+    echo "export HOSTNAME=${HOSTNAME}" >> /root/env.sh
+    echo "export LANGUAGE=${LANGUAGE}" >> /root/env.sh
+    echo "export DESKTOP_ENV=${DESKTOP_ENV}" >> /root/env.sh
+    echo "export BOOTLOADER=${BOOTLOADER}" >> /root/env.sh
+    echo "export XORG_DRIVERS=${XORG_DRIVERS}" >> /root/env.sh
 }
 
 ### Main
@@ -180,17 +182,14 @@ case $inst in
         printf "Do you want to use defaults? (Y/n): "
         read defaults
         case $defaults in
-            ''|'y'|'Y')
-                source $PWD/env.sh
-            ;;
-            *)
+            ''|'n'|'N')
                 customize_env
             ;;
         esac
+        source /root/env.sh
         install_system
     ;;
     *)
         echo "Re-run 'install.sh' to install your system."
     ;;
 esac
-
