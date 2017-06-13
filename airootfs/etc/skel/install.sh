@@ -22,7 +22,7 @@ install_system() {
     fi
 
     # nVidia vs AMD vs VBox
-    echo "*** Installing Drivers... ***"
+    echo "*** Installing ${XORG_DRIVERS} drivers... ***"
     if [[ $XORG_DRIVERS == "vbox" ]]
     then
         PACKAGES="$PACKAGES virtualbox-guest-modules-arch virtualbox-guest-utils"
