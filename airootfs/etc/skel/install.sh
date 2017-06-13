@@ -68,7 +68,7 @@ customize_env() {
     source /root/env.sh
 
     echo "I'll now ask for data needed to install your system."
-    echo "If you leave it blank, it will just use defaults. (See env.sh)."
+    echo "If you leave it blank, it will just use defaults."
     echo ""
 
     # Name
@@ -181,7 +181,7 @@ read inst
 
 case $inst in
     ''|'y'|'Y')
-        printf "Do you want to use defaults? (Y/n): "
+        printf "Do you want to use defaults? (See env.sh) (Y/n): "
         read defaults
         case $defaults in
             'n'|'N')
