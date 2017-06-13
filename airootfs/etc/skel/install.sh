@@ -164,12 +164,12 @@ customize_env() {
 
     echo '' > /root/env.sh
 
-    echo "export USERNAME=${USERNAME}" >> /root/env.sh
-    echo "export HOSTNAME=${HOSTNAME}" >> /root/env.sh
-    echo "export LANGUAGE=${LANGUAGE}" >> /root/env.sh
-    echo "export DESKTOP_ENV=${DESKTOP_ENV}" >> /root/env.sh
-    echo "export BOOTLOADER=${BOOTLOADER}" >> /root/env.sh
-    echo "export XORG_DRIVERS=${XORG_DRIVERS}" >> /root/env.sh
+    echo "export USERNAME=\"${USERNAME}\"" >> /root/env.sh
+    echo "export HOSTNAME=\"${HOSTNAME}\"" >> /root/env.sh
+    echo "export LANGUAGE=\"${LANGUAGE}\"" >> /root/env.sh
+    echo "export DESKTOP_ENV=\"${DESKTOP_ENV}\"" >> /root/env.sh
+    echo "export BOOTLOADER=\"${BOOTLOADER}\"" >> /root/env.sh
+    echo "export XORG_DRIVERS=\"${XORG_DRIVERS}\"" >> /root/env.sh
 }
 
 ### Main
