@@ -216,12 +216,8 @@ make_iso() {
     mkarchiso ${verbose} -w "${work_dir}" -D "${install_dir}" -L "${iso_label}" -o "${out_dir}" iso "${iso_name}-${iso_version}-custom.iso"
 }
 
-# Make local pkg database and repo
-make_local_repo() {
-    # Create obligatory directories
-    newroot="$(pwd)"/TEMPMNT
-    pkgdb="$(pwd)"/airootfs/etc/skel/pkg
-
+# Create needed folders for make_local_repo
+make_folder() {
     # Make root directory
     if [[ ! -e "$newroot" ]]; then
         mkdir -p "$newroot"
@@ -231,33 +227,31 @@ make_local_repo() {
         mkdir -m 0555 -p "$newroot"/{sys,proc}
     fi
 
-    # Pull packages from the Internet if needed
-    if [[ ! -e "$pkgdb" || -e "repo.lock" || -e "pkgdl.lock" || -e "pkgdb.lock" ]]; then
-        touch "repo.lock"
-
-        if [[ ! -e "$pkgdb" ]]; then
-            mkdir -p "$pkgdb"
-        fi
-
-        if [[ ! -e "pkgdb.lock" || ! -e "pkgdl.lock" ]]; then
-            touch "pkgdl.lock"
-            pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
-        fi
-
-        # Create DB
-        echo ""
-        echo "Creating DB for all packages in ${pkgdb}"
-        touch "pkgdb.lock"
-        repo-add "$pkgdb"/custom.db.tar.gz "$pkgdb"/*.xz
-        sync
-
-        rm "pkgdl.lock"
-        rm "pkgdb.lock"
-        rm "repo.lock"
+    # Make repo folder
+    if [[ ! -e "$pkgdb" ]]; then
+        mkdir -p "$pkgdb"
     fi
+}
+
+# Pull packages from Internet
+make_download() {
+    pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
+}
+
+# Create Pacman DB
+make_database() {
+    repo-add "$pkgdb"/custom.db.tar.gz "$pkgdb"/*.xz
+}
+
+# Make local pkg database and repo
+make_local_repo() {
+    run_once make_folder
+    run_once make_download
+    run_once make_database
+    sync
 
     echo ""
-    echo "*** Local repo is ready! ***"
+    echo "Local repo is ready!"
 }
 
 # Clean-up
@@ -298,7 +292,13 @@ done
 mkdir -p ${work_dir}
 
 #### Main script ####
-run_once make_local_repo
+export newroot="$(pwd)"/TEMPMNT
+export pkgdb="$(pwd)"/airootfs/etc/skel/pkg
+
+# Create new local repo only if needed
+if [[ ! -e "$pkgdb/custom.db" ]]; then
+    run_once make_local_repo
+fi
 
 run_once make_pacman_conf
 
