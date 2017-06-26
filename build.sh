@@ -235,7 +235,7 @@ make_folder() {
 
 # Pull packages from Internet
 make_download() {
-    pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils
+    pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es okular gwenview virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils git unrar unzip p7zip
 }
 
 # Create Pacman DB

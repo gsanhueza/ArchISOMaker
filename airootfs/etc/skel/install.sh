@@ -1,11 +1,11 @@
 install_system() {
-    PACKAGES="base base-devel yaourt vim grml-zsh-config gstreamer smplayer xorg-server cantarell-fonts xorg-xinit xf86-input-libinput intel-ucode alsa-utils"
+    PACKAGES="base base-devel yaourt vim grml-zsh-config gstreamer smplayer xorg-server cantarell-fonts xorg-xinit xf86-input-libinput intel-ucode alsa-utils git unrar unzip p7zip"
 
     # KDE vs GNOME
     echo "*** Installing ${DESKTOP_ENV}... ***"
     if [ $DESKTOP_ENV == "KDE" ]
     then
-        PACKAGES="$PACKAGES plasma kdebase kde-l10n-es"
+        PACKAGES="$PACKAGES plasma kdebase kde-l10n-es okular gwenview"
     elif [ $DESKTOP_ENV == "GNOME" ]
     then
         PACKAGES="$PACKAGES gnome gnome-tweak-tool"
