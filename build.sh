@@ -242,9 +242,10 @@ make_download() {
     VBOX="virtualbox-guest-modules-arch virtualbox-guest-utils"
     GNOME="gnome gnome-tweak-tool"
     KDE="plasma kdebase kde-l10n-es okular gwenview"
+    I3="i3 feh compton rofi wicd-gtk qterminal dmenu lxdm"
     NVIDIA="nvidia bumblebee"
     FONTS="cantarell-fonts"
-    pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm $ESSENTIALS $UTILITIES $MULTIMEDIA $BOOT $VBOX $GNOME $KDE $NVIDIA $FONTS
+    pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm $ESSENTIALS $UTILITIES $MULTIMEDIA $BOOT $VBOX $GNOME $KDE $NVIDIA $FONTS $I3
 }
 
 # Create Pacman DB
