@@ -235,7 +235,17 @@ make_folder() {
 
 # Pull packages from Internet
 make_download() {
-    pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm base base-devel yaourt vim grml-zsh-config gstreamer smplayer nvidia bumblebee refind-efi grub os-prober xorg xorg-xinit xorg-drivers cantarell-fonts gnome gnome-tweak-tool plasma kdebase kde-l10n-es okular gwenview virtualbox-guest-modules-arch virtualbox-guest-utils intel-ucode lynx alsa-utils git unrar unzip p7zip
+    ESSENTIALS="base base-devel xorg xorg-xinit xorg-drivers"
+    UTILITIES="yaourt vim grml-zsh-config lynx alsa-utils git unrar unzip p7zip"
+    MULTIMEDIA="gstreamer smplayer"
+    BOOT="refind-efi grub os-prober intel-ucode"
+    VBOX="virtualbox-guest-modules-arch virtualbox-guest-utils"
+    GNOME="gnome gnome-tweak-tool"
+    KDE="plasma kdebase kde-l10n-es okular gwenview"
+    I3="i3 feh compton rofi wicd-gtk qterminal dmenu lxdm lxappearance"
+    NVIDIA="nvidia bumblebee"
+    FONTS="cantarell-fonts ttf-hack"
+    pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm $ESSENTIALS $UTILITIES $MULTIMEDIA $BOOT $VBOX $GNOME $KDE $I3 $NVIDIA $FONTS
 }
 
 # Create Pacman DB

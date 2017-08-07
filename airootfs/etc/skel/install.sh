@@ -1,7 +1,7 @@
 install_system() {
     PACKAGES="base base-devel yaourt vim grml-zsh-config gstreamer smplayer xorg-server cantarell-fonts xorg-xinit xf86-input-libinput intel-ucode alsa-utils git unrar unzip p7zip"
 
-    # KDE vs GNOME
+    # KDE vs GNOME vs i3
     echo "*** Installing ${DESKTOP_ENV}... ***"
     if [ $DESKTOP_ENV == "KDE" ]
     then
@@ -9,6 +9,9 @@ install_system() {
     elif [ $DESKTOP_ENV == "GNOME" ]
     then
         PACKAGES="$PACKAGES gnome gnome-tweak-tool"
+    elif [ $DESKTOP_ENV == "i3" ]
+    then
+	PACKAGES="$PACKAGES i3 feh compton rofi wicd-gtk qterminal dmenu lxdm lxappearance ttf-hack"
     fi
 
     # rEFInd vs GRUB
@@ -109,7 +112,7 @@ customize_env() {
 
     # Desktop environment
     echo "Choose your Desktop Environment (default=${DESKTOP_ENV})"
-    printf "(1) KDE    (2) GNOME: "
+    printf "(1) KDE    (2) GNOME    (3) i3: "
     read ans
     case $ans in
         '')
@@ -121,6 +124,9 @@ customize_env() {
         '2')
             DESKTOP_ENV="GNOME"
         ;;
+	'3')
+	    DESKTOP_ENV="i3"
+	;;
         *)
             echo "Wrong choice, halting now!"
             exit 1
