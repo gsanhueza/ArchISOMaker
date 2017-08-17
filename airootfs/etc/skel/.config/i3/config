@@ -155,6 +155,6 @@ bar {
         status_command i3status
 }
 
-exec setxkbmap latam
-exec --no-startup-id feh --bg-scale "/root/.instructionsgui.png"
+exec --no-startup-id setxkbmap latam
+exec --no-startup-id feh --bg-scale "/root/.instructionsgui.png" --no-fehbg
 
