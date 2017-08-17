@@ -241,7 +241,7 @@ make_download() {
     BOOT="refind-efi grub os-prober intel-ucode"
     VBOX="virtualbox-guest-modules-arch virtualbox-guest-utils"
     GNOME="gnome gnome-tweak-tool"
-    KDE="plasma kdebase kde-l10n-es okular gwenview"
+    KDE="plasma kdebase kde-l10n-es okular gwenview spectacle"
     I3="i3 feh compton rofi wicd-gtk qterminal dmenu lxdm lxappearance"
     NVIDIA="nvidia bumblebee"
     FONTS="cantarell-fonts ttf-hack"
