@@ -18,7 +18,7 @@ Your ISO file will be in the parent of this folder.
 This custom builder pulls the most updated ArchLinux packages before creating the ISO file, which implies that you need a working internet connection to pull these packages.
 
 If you already have what you want (i.e. the `airootfs/etc/skel/pkg` folder exists and has a custom.db.tar.gz file too) then this script will just build your ISO.
-Else, this script will pull the packages (specified in `build.sh`), create a DB and build your ISO.
+Else, this script will pull the packages (specified in `packages.sh`), create a DB and build your ISO.
 
 If you already used this script, but want to update the packages to create a new ISO, please delete the `airootfs/etc/skel/pkg` folder and run `build.sh -v` to allow the script to create the *pkg* folder again.
 
