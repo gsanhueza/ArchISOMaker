@@ -34,7 +34,7 @@ install_system() {
         PACKAGES="$PACKAGES nvidia bumblebee"
     elif [[ $XORG_DRIVERS == "amd" ]]
     then
-        PACKAGES="$PACKAGES xf86-video-ati"
+        PACKAGES="$PACKAGES xf86-video-amdgpu"
     fi
 
     # Installing here
