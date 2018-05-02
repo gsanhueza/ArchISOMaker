@@ -1,5 +1,5 @@
 install_system() {
-    PACKAGES="base base-devel yaourt vim grml-zsh-config gstreamer smplayer xorg-server cantarell-fonts xorg-xinit xf86-input-libinput intel-ucode alsa-utils git unrar unzip p7zip"
+    PACKAGES="base base-devel yaourt vim grml-zsh-config gstreamer smplayer mpv xorg-server cantarell-fonts xorg-xinit xf86-input-libinput intel-ucode alsa-utils git unrar unzip p7zip"
 
     # KDE vs GNOME vs i3
     echo "*** Installing ${DESKTOP_ENV}... ***"
@@ -11,7 +11,7 @@ install_system() {
         PACKAGES="$PACKAGES gnome gnome-tweak-tool"
     elif [ $DESKTOP_ENV == "i3" ]
     then
-	PACKAGES="$PACKAGES i3 feh compton rofi wicd-gtk qterminal dmenu lxdm lxappearance ttf-hack"
+	PACKAGES="$PACKAGES i3 feh compton qterminal dmenu lxdm lxappearance ttf-hack nm-applet playerctl"
     fi
 
     # rEFInd vs GRUB

@@ -17,12 +17,7 @@ echo "+++ Creating hostname '${HOSTNAME}'... +++"
 echo $HOSTNAME > /etc/hostname
 
 echo "+++ Enabling networking... +++"
-if [ $DESKTOP_ENV == "i3" ]
-then
-	systemctl enable wicd.service
-else
-	systemctl enable NetworkManager.service
-fi
+systemctl enable NetworkManager.service
 
 echo "+++ Enabling display manager... +++"
 if [ $DESKTOP_ENV == "KDE" ]

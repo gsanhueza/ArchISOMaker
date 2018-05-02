@@ -35,6 +35,7 @@ I'm currently offering to install:
 ### Desktop environments
 * KDE
 * GNOME
+* i3
 
 ### Bootloaders
 * rEFInd
@@ -42,7 +43,7 @@ I'm currently offering to install:
 
 ### Graphic drivers
 * nVidia
-* AMD (Legacy)
+* AMD
 * VirtualBox
 * Intel
 
