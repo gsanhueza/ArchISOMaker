@@ -11,7 +11,7 @@ install_system() {
         PACKAGES="$PACKAGES gnome gnome-tweak-tool"
     elif [ $DESKTOP_ENV == "i3" ]
     then
-	PACKAGES="$PACKAGES i3 feh compton qterminal dmenu lxdm lxappearance ttf-hack nm-applet gnome-keyring playerctl"
+	PACKAGES="$PACKAGES i3 feh compton qterminal dmenu lxdm lxappearance ttf-hack network-manager-applet gnome-keyring playerctl mc"
     fi
 
     # rEFInd vs GRUB
