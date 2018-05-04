@@ -1,5 +1,5 @@
 #!/bin/bash
-source "$PWD/packages.sh"
+source "$PWD/airootfs/etc/skel/packages.sh"
 
 set -e -u
 
@@ -237,7 +237,7 @@ make_folder() {
 # Pull packages from Internet
 # See packages.sh
 make_download() {
-    pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm $ESSENTIALS $UTILITIES $MULTIMEDIA $BOOT $VBOX $GNOME $KDE $I3 $NVIDIA $FONTS
+    pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm $ALL
 }
 
 # Create Pacman DB

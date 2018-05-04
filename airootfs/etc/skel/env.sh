@@ -1,6 +1,6 @@
-export USERNAME="gabriel"
-export HOSTNAME="linux-pc"
-export LANGUAGE="es_CL"
-export DESKTOP_ENV="KDE" # KDE, GNOME, i3
-export BOOTLOADER="refind" # refind, grub
-export XORG_DRIVERS="nvidia" # nvidia, amd, vbox
+USERNAME="gabriel"
+HOSTNAME="linux-pc"
+LANGUAGE="es_CL"
+DESKTOP_ENV="KDE" # KDE, GNOME, i3
+BOOTLOADER="refind" # refind, grub
+XORG_DRIVERS="nvidia" # nvidia, amd, vbox, intel

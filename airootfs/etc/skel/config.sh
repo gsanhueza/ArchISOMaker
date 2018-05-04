@@ -1,4 +1,4 @@
-source $PWD/env.sh
+source /root/env.sh
 
 echo "+++ Linking zoneinfo... +++"
 ln -s /usr/share/zoneinfo/America/Santiago /etc/localtime -f

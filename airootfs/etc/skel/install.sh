@@ -1,40 +1,45 @@
 install_system() {
-    PACKAGES="base base-devel yaourt vim grml-zsh-config gstreamer smplayer mpv xorg-server cantarell-fonts xorg-xinit xf86-input-libinput intel-ucode alsa-utils git unrar unzip p7zip"
+    source /root/packages.sh
+
+    PACKAGES="$BASE"
 
     # KDE vs GNOME vs i3
     echo "*** Installing ${DESKTOP_ENV}... ***"
     if [ $DESKTOP_ENV == "KDE" ]
     then
-        PACKAGES="$PACKAGES plasma kdebase kde-l10n-es okular gwenview"
+        PACKAGES="$PACKAGES $KDE"
     elif [ $DESKTOP_ENV == "GNOME" ]
     then
-        PACKAGES="$PACKAGES gnome gnome-tweak-tool"
+        PACKAGES="$PACKAGES $GNOME"
     elif [ $DESKTOP_ENV == "i3" ]
     then
-	PACKAGES="$PACKAGES i3 feh compton qterminal dmenu lxdm lxappearance ttf-hack network-manager-applet gnome-keyring playerctl mc"
+	PACKAGES="$PACKAGES $I3"
     fi
 
     # rEFInd vs GRUB
     echo "*** Installing ${BOOTLOADER}... ***"
     if [[ $BOOTLOADER == "refind" ]]
     then
-        PACKAGES="$PACKAGES refind-efi"
+        PACKAGES="$PACKAGES $REFIND"
     elif [[ $BOOTLOADER == "grub" ]]
     then
-        PACKAGES="$PACKAGES grub os-prober"
+        PACKAGES="$PACKAGES $GRUB"
     fi
 
     # nVidia vs AMD vs VBox
     echo "*** Installing ${XORG_DRIVERS} drivers... ***"
-    if [[ $XORG_DRIVERS == "vbox" ]]
+    if [[ $XORG_DRIVERS == "nvidia" ]]
     then
-        PACKAGES="$PACKAGES virtualbox-guest-modules-arch virtualbox-guest-utils"
-    elif [[ $XORG_DRIVERS == "nvidia" ]]
-    then
-        PACKAGES="$PACKAGES nvidia bumblebee"
+        PACKAGES="$PACKAGES $NVIDIA"
     elif [[ $XORG_DRIVERS == "amd" ]]
     then
-        PACKAGES="$PACKAGES xf86-video-amdgpu"
+        PACKAGES="$PACKAGES $AMD"
+    elif [[ $XORG_DRIVERS == "vbox" ]]
+    then
+        PACKAGES="$PACKAGES $VBOX"
+    elif [[ $XORG_DRIVERS == "intel" ]]
+    then
+        PACKAGES="$PACKAGES $INTEL"
     fi
 
     # Installing here
