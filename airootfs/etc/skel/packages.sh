@@ -3,7 +3,7 @@ XORG="xorg xorg-drivers"
 
 GNOME="gnome gnome-tweak-tool"
 KDE="plasma kdebase kde-l10n-es okular gwenview spectacle smplayer"
-I3="i3 feh compton kitty dmenu lxdm lxappearance network-manager-applet gnome-keyring playerctl mc lynx"
+I3="i3 feh mc compton dmenu lxdm lxappearance lxterminal network-manager-applet gnome-keyring"
 
 REFIND="refind-efi"
 GRUB="grub os-prober"
