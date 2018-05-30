@@ -220,45 +220,47 @@ make_iso() {
 # Create needed folders for make_local_repo
 make_folder() {
     # Make root directory
-    if [[ ! -e "$newroot" ]]; then
-        mkdir -p "$newroot"
-        echo "Creating temporal install root at ${newroot}"
-        mkdir -m 0755 -p "$newroot"/var/{cache/pacman/pkg,lib/pacman,log} "$newroot"/{dev,run,etc}
-        mkdir -m 1777 -p "$newroot"/tmp
-        mkdir -m 0555 -p "$newroot"/{sys,proc}
+    if [[ ! -e $NEWROOTLOC ]]; then
+        mkdir -p $NEWROOTLOC
+        echo "Creating temporal install root at ${NEWROOTLOC}"
+        mkdir -m 0755 -p "$NEWROOTLOC"/var/{cache/pacman/pkg,lib/pacman,log} $NEWROOTLOC/{dev,run,etc}
+        mkdir -m 1777 -p "$NEWROOTLOC"/tmp
+        mkdir -m 0555 -p "$NEWROOTLOC"/{sys,proc}
     fi
 
     # Make repo folder
-    if [[ ! -e "$pkgdb" ]]; then
-        mkdir -p "$pkgdb"
+    if [[ ! -e $PKGDBLOC ]]; then
+        mkdir -p $PKGDBLOC
     fi
 }
 
 # Pull packages from Internet
 # See packages.sh
 make_download() {
-    pacman -Syw --root $newroot --cachedir $pkgdb --noconfirm $ALL
+    pacman -Syw --root $NEWROOTLOC --cachedir $PKGDBLOC --noconfirm $ALL
 }
 
 # Adds an AUR Helper to the ISO
 make_aur_helper() {
     # FIXME Automatize compilation step instead of depending on a (maybe inexistent) file
-    aurhelperloc=$(ls -1 /home/gabriel/.cache/yay/yay-bin/*pkg.tar* | tail -n 1) 
-    if [[ -e $aurhelperloc ]]; then
-        cp $aurhelperloc $pkgdb -v
+    AURHELPERLOC=$(ls -1 /home/gabriel/.cache/yay/$AURHELPER/*pkg.tar* | tail -n 1) 
+    if [[ -e $AURHELPERLOC ]]; then
+        cp $AURHELPERLOC $PKGDBLOC -v
 	# If it exists, add it in AUR in packages.sh
-        sed -i "s/AUR=\"\"/AUR=\"yay-bin\"/g" "$PWD/airootfs/etc/skel/packages.sh"
+	add_aur_helper $AURHELPER
+    else
+	revert_aur_helper $AURHELPER
     fi
 }
 
 # Create Pacman DB
 make_database() {
-    repo-add $pkgdb/custom.db.tar.gz $pkgdb/*pkg.tar*
+    repo-add $PKGDBLOC/custom.db.tar.gz $PKGDBLOC/*pkg.tar*
 }
 
 # Make local pkg database and repo only if needed
 make_local_repo() {
-    if [[ ! -e "$pkgdb/custom.db" ]]; then
+    if [[ ! -e $PKGDBLOC/custom.db ]]; then
         run_once make_folder
         run_once make_download
         run_once make_aur_helper
@@ -270,9 +272,15 @@ make_local_repo() {
     echo "Local repo is ready!"
 }
 
+
+
 # Reverts the adding of an AUR helper, so we can start clean again for the next ISO
+add_aur_helper() {
+    sed -i "s/AUR=\"\"/AUR=\"$AURHELPER\"/g" "$PWD/airootfs/etc/skel/packages.sh"
+}
+
 revert_aur_helper() {
-    sed -i "s/AUR=\"yay-bin\"/AUR=\"\"/g" "$PWD/airootfs/etc/skel/packages.sh"
+    sed -i "s/AUR=\"$AURHELPER\"/AUR=\"\"/g" "$PWD/airootfs/etc/skel/packages.sh"
 }
 
 # Clean-up
@@ -314,8 +322,9 @@ done
 mkdir -p ${work_dir}
 
 #### Main script ####
-export newroot="$(pwd)"/TEMPMNT
-export pkgdb="$(pwd)"/airootfs/etc/skel/pkg
+NEWROOTLOC="$(pwd)"/TEMPMNT
+PKGDBLOC="$(pwd)"/airootfs/etc/skel/pkg
+AURHELPER="yay-bin"
 
 # Create new local repo
 run_once make_local_repo
@@ -347,3 +356,4 @@ run_once make_iso
 
 # Clean-up routine
 clean_up
+
