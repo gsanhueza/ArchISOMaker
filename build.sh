@@ -237,27 +237,47 @@ make_folder() {
 # Pull packages from Internet
 # See packages.sh
 make_download() {
-    pacman -Syw --root "$newroot" --cachedir "$pkgdb" --noconfirm $ALL
+    pacman -Syw --root $newroot --cachedir $pkgdb --noconfirm $ALL
+}
+
+# Adds an AUR Helper to the ISO
+make_aur_helper() {
+    # FIXME Automatize compilation step instead of depending on a (maybe inexistent) file
+    aurhelperloc=$(ls -1 /home/gabriel/.cache/yay/yay-bin/*pkg.tar* | tail -n 1) 
+    if [[ -e $aurhelperloc ]]; then
+        cp $aurhelperloc $pkgdb -v
+	# If it exists, add it in AUR in packages.sh
+        sed -i "s/AUR=\"\"/AUR=\"yay-bin\"/g" "$PWD/airootfs/etc/skel/packages.sh"
+    fi
 }
 
 # Create Pacman DB
 make_database() {
-    repo-add "$pkgdb"/custom.db.tar.gz "$pkgdb"/*.xz
+    repo-add $pkgdb/custom.db.tar.gz $pkgdb/*pkg.tar*
 }
 
-# Make local pkg database and repo
+# Make local pkg database and repo only if needed
 make_local_repo() {
-    run_once make_folder
-    run_once make_download
-    run_once make_database
+    if [[ ! -e "$pkgdb/custom.db" ]]; then
+        run_once make_folder
+        run_once make_download
+        run_once make_aur_helper
+        run_once make_database
+    fi
     sync
 
     echo ""
     echo "Local repo is ready!"
 }
 
+# Reverts the adding of an AUR helper, so we can start clean again for the next ISO
+revert_aur_helper() {
+    sed -i "s/AUR=\"yay-bin\"/AUR=\"\"/g" "$PWD/airootfs/etc/skel/packages.sh"
+}
+
 # Clean-up
 clean_up() {
+    revert_aur_helper
     rm work/ -rf
     rm TEMPMNT/ -rf
     mv out/* ..
@@ -297,10 +317,8 @@ mkdir -p ${work_dir}
 export newroot="$(pwd)"/TEMPMNT
 export pkgdb="$(pwd)"/airootfs/etc/skel/pkg
 
-# Create new local repo only if needed
-if [[ ! -e "$pkgdb/custom.db" ]]; then
-    run_once make_local_repo
-fi
+# Create new local repo
+run_once make_local_repo
 
 run_once make_pacman_conf
 

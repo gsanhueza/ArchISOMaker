@@ -1,4 +1,5 @@
-BASE="base base-devel yaourt vim grml-zsh-config gstreamer mpv intel-ucode cantarell-fonts ttf-hack alsa-utils xorg-server xorg-xinit xf86-input-libinput git unrar unzip p7zip"
+BASE="base base-devel vim grml-zsh-config gstreamer mpv intel-ucode cantarell-fonts ttf-hack alsa-utils xorg-server xorg-xinit xf86-input-libinput git unrar unzip p7zip"
+AUR=""
 XORG="xorg xorg-drivers"
 
 GNOME="gnome gnome-tweak-tool"

@@ -1,7 +1,7 @@
 install_system() {
     source /root/packages.sh
 
-    PACKAGES="$BASE"
+    PACKAGES="$BASE $AUR"
 
     # KDE vs GNOME vs i3
     echo "*** Installing ${DESKTOP_ENV}... ***"
