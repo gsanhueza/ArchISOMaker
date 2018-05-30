@@ -1,4 +1,4 @@
-BASE="base base-devel vim grml-zsh-config gstreamer mpv intel-ucode cantarell-fonts ttf-hack alsa-utils xorg-server xorg-xinit xf86-input-libinput git unrar unzip p7zip pacman-contrib"
+BASE="base base-devel vim vim-airline vim-fugitive grml-zsh-config gstreamer mpv intel-ucode ttf-hack alsa-utils xorg-server xorg-xinit xf86-input-libinput git unrar unzip p7zip pacman-contrib"
 AUR=""
 XORG="xorg xorg-drivers"
 
