@@ -4,7 +4,7 @@ XORG="xorg xorg-drivers"
 
 GNOME="gnome gnome-tweak-tool"
 KDE="plasma kdebase kde-l10n-es okular gwenview spectacle smplayer"
-I3="i3 feh mc compton dmenu wpa_supplicant dialog pulseaudio-alsa sddm qterminal networkmanager"
+I3="i3 feh mc compton dmenu wpa_supplicant dialog pulseaudio-alsa sddm networkmanager" # qterminal"
 
 REFIND="refind-efi"
 GRUB="grub os-prober"

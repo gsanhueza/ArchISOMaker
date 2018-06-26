@@ -1,5 +1,6 @@
 arch-install-scripts
 b43-fwcutter
+broadcom-wl
 btrfs-progs
 clonezilla
 crda
@@ -50,7 +51,6 @@ rsync
 sdparm
 sg3_utils
 smartmontools
-speedtouch
 sudo
 tcpdump
 testdisk
@@ -62,7 +62,6 @@ wireless_tools
 wpa_actiond
 wvdial
 xl2tpd
-zd1211-firmware
 xorg
 xorg-xinit
 xorg-drivers
