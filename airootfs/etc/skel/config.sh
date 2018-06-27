@@ -1,6 +1,6 @@
 source /root/env.sh
 
-set_zoneinfo() 
+set_zoneinfo()
 {
     echo "+++ Linking zoneinfo... +++"
     ln -s /usr/share/zoneinfo/$1 /etc/localtime -f
@@ -80,14 +80,23 @@ install_bootloader()
 {
     echo ""
     echo "+++ Installing" $1 "bootloader... +++"
-    
+
     if [ "$1" == "grub" ]
     then
     	grub-install /dev/sda --force
     	grub-mkconfig -o /boot/grub/grub.cfg
     elif [ "$1" == "refind" ]
     then
-    	mkdir -p /boot/EFI/refind # Mini-hack
+	# Bait refind-install into thinking that a refind install already exists,
+	# so it will "upgrade" (install) in default location /boot/EFI/refind
+	# This is done to avoid moving Microsoft's original bootloader.
+
+	# Comment the following two lines if you have an HP computer
+	# (suboptimal EFI implementation), or you don't mind moving
+	# the original bootloader.
+   	mkdir -p /boot/EFI/refind
+	cp /usr/share/refind/refind.conf-sample /boot/EFI/refind/refind.conf
+
     	refind-install
     	REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
     	echo "\"Boot with standard options\"        \"rw root=${REFIND_UUID} initrd=/intel-ucode.img initrd=/initramfs-linux.img rcutree.rcu_idle_gp_delay=1 acpi_osi= acpi_backlight=native splash\"" > /boot/refind_linux.conf
