@@ -17,6 +17,12 @@ script_path=$(readlink -f ${0%/*})
 
 umask 0022
 
+# Custom variables
+NEWROOTLOC="$(pwd)"/TEMPMNT
+PKGDBLOC="$(pwd)"/airootfs/etc/skel/pkg
+AURHELPER="yay-bin"
+UPDATECACHE=1
+
 _usage ()
 {
     echo "usage ${0} [options]"
@@ -257,13 +263,14 @@ make_aur_helper() {
 
 # Create Pacman DB
 make_database() {
-    repo-add $PKGDBLOC/custom.db.tar.gz $PKGDBLOC/*pkg.tar*
+    repo-add -n -R $PKGDBLOC/custom.db.tar.gz $PKGDBLOC/*pkg.tar*
 }
 
 # Make local pkg database and repo only if needed
 make_local_repo() {
-    if [[ ! -e $PKGDBLOC/custom.db ]]; then
-        run_once make_folder
+    run_once make_folder
+    
+    if [[ ! -e $PKGDBLOC/custom.db || UPDATECACHE ]]; then
         run_once make_download
         run_once make_aur_helper
         run_once make_database
@@ -321,13 +328,11 @@ done
 mkdir -p ${work_dir}
 
 #### Main script ####
-NEWROOTLOC="$(pwd)"/TEMPMNT
-PKGDBLOC="$(pwd)"/airootfs/etc/skel/pkg
-AURHELPER="yay-bin"
 
 # Create new local repo
 run_once make_local_repo
-
+clean_up # DELETE
+exit 8 # DELETE
 run_once make_pacman_conf
 
 # Do all initial stuff
