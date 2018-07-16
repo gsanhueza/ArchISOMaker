@@ -331,8 +331,6 @@ mkdir -p ${work_dir}
 
 # Create new local repo
 run_once make_local_repo
-clean_up # DELETE
-exit 8 # DELETE
 run_once make_pacman_conf
 
 # Do all initial stuff
