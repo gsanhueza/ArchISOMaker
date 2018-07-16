@@ -17,10 +17,10 @@ Your ISO file will be in the parent of this folder.
 
 This custom builder pulls the most updated ArchLinux packages before creating the ISO file, which implies that you need a working internet connection to pull these packages.
 
-If you already have what you want (i.e. the `airootfs/etc/skel/pkg` folder exists and has a custom.db.tar.gz file too) then this script will just build your ISO.
-Else, this script will pull the packages (specified in `airootfs/etc/skel/packages.sh`), create a DB and build your ISO.
+If your desired packages are already in `airootfs/etc/skel/pkg` (or you don't want to pull new packages from the Internet), edit `build.sh` and change the *UPDATECACHE* variable to 0.
 
-If you already used this script, but want to update the packages to create a new ISO, please delete the `airootfs/etc/skel/pkg` folder and run `build.sh -v` to allow the script to create the *pkg* folder again.
+If you want to update old packages, edit `build.sh` and change the *UPDATECACHE* variable to 1. (This is the default behaviour.)
+Then, this script will pull the packages (specified in `airootfs/etc/skel/packages.sh`), create a DB and build your ISO.
 
 ## Relevant notes (ISO installation)
 
@@ -28,7 +28,7 @@ The idea behind this ISO maker is to provide a way to create your own ArchLinux 
 In other words, this implies that the ISO file that you created using `build.sh` will allow you to install ArchLinux on any computer, even **without** internet access.
 The created ISO will offer you to automatize your installation (although you can do it manually too, if that's what you want).
 
-The automatized process will install straightforwardly by reading an `env.sh` file that you can edit manually, or interactively through the `install.sh` installation script.
+The automated installer will use data in the `env.sh` file (you can edit it manually too), or interactively through the `install.sh` installation script.
 
 I'm currently offering to install:
 
