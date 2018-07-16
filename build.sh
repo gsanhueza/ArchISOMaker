@@ -270,7 +270,7 @@ make_database() {
 make_local_repo() {
     run_once make_folder
     
-    if [[ ! -e $PKGDBLOC/custom.db || UPDATECACHE ]]; then
+    if (( UPDATECACHE )); then
         run_once make_download
         run_once make_aur_helper
         run_once make_database
