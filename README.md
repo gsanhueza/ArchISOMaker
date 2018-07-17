@@ -3,19 +3,18 @@ A custom Arch Linux ISO Maker (Just a bunch of scripts)
 
 ## Instructions
 
-* Login as root
-* Run the command
+* Clone this repo.
+* Run
 ```bash
-# ./build -v
+$ sudo ./build -v
 ```
 * ???
-* Profit!
-
-Your ISO file will be in the parent of this folder.
+* Profit! Your ISO file will be in the parent of this folder.
 
 ## Relevant notes (ISO building)
 
 This custom builder pulls the most updated ArchLinux packages before creating the ISO file, which implies that you need a working internet connection to pull these packages.
+You need to have `archiso` installed, as it's a dependency to make this script work.
 
 If your desired packages are already in `airootfs/etc/skel/pkg` (or you don't want to pull new packages from the Internet), edit `build.sh` and change the *UPDATECACHE* variable to 0.
 

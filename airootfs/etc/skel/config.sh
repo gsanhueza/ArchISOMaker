@@ -62,6 +62,12 @@ configure_root_account()
     echo "+++ Setting root account... +++"
     chsh -s /bin/zsh
     passwd
+
+    while (( $? != 0 )); do
+        echo ""
+        echo "Try again!"
+        passwd
+    done
 }
 
 set_user_account()
@@ -70,6 +76,12 @@ set_user_account()
     echo "+++ Creating" $1 "account... +++"
     useradd -m -G wheel -s /bin/zsh "$1"
     passwd "$1"
+
+    while (( $? != 0 )); do
+        echo ""
+        echo "Try again!"
+        passwd "$1"
+    done
 
     echo ""
     echo "+++ Enabling sudo for" $1 "... +++"

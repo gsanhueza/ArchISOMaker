@@ -1,3 +1,5 @@
+script_name=${0##*/}
+
 install_system() {
     source /root/packages.sh
 
@@ -58,8 +60,6 @@ install_system() {
     umount -R /mnt
 
     echo ""
-    echo "*** Syncing drives ***"
-    sync
 
     for i in 0 1 2
     do
@@ -69,6 +69,7 @@ install_system() {
 
     echo "Rebooting now..."
     sleep 1
+    sync
     reboot
 }
 
@@ -194,8 +195,22 @@ customize_env() {
     echo "export XORG_DRIVERS=\"${XORG_DRIVERS}\"" >> /root/env.sh
 }
 
+check_mounted_drive() {
+    MOUNTPOINT="/mnt"
+    B=$(tput bold)
+    N=$(tput sgr0)
+
+    if [[ $(findmnt -M "$MOUNTPOINT") ]]; then
+        echo "Drive mounted in $MOUNTPOINT."
+    else
+        echo "Drive is ${B}NOT MOUNTED!${N} Mount your drive in '$MOUNTPOINT' and re-run '$script_name' to install your system."
+        exit 1
+    fi
+}
+
 ### Main
 
+check_mounted_drive
 printf "Do you wish to install now? (Y/n): "
 read inst
 
@@ -212,6 +227,6 @@ case $inst in
         install_system
     ;;
     *)
-        echo "Re-run 'install.sh' to install your system."
+        echo "Re-run '$script_name' to install your system."
     ;;
 esac
