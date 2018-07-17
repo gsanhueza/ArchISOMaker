@@ -4,10 +4,7 @@ A custom Arch Linux ISO Maker (Just a bunch of scripts)
 ## Instructions
 
 * Clone this repo.
-* Run
-```bash
-$ sudo ./build -v
-```
+* Run `$ sudo ./build -v`
 * ???
 * Profit! Your ISO file will be in the parent of this folder.
 
@@ -45,4 +42,3 @@ I'm currently offering to install:
 * AMD
 * VirtualBox
 * Intel
-

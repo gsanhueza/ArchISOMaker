@@ -30,7 +30,7 @@ font pango:monospace 10
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec xterm -bg black -fg gray 
+bindsym $mod+Return exec xterm -bg black -fg gray
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -157,4 +157,3 @@ bar {
 
 exec --no-startup-id setxkbmap latam
 exec --no-startup-id feh --bg-scale "/root/.instructionsgui.png" --no-fehbg
-
