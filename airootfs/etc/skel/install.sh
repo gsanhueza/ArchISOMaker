@@ -203,7 +203,8 @@ check_mounted_drive() {
     if [[ $(findmnt -M "$MOUNTPOINT") ]]; then
         echo "Drive mounted in $MOUNTPOINT."
     else
-        echo "Drive is ${B}NOT MOUNTED!${N} Mount your drive in '$MOUNTPOINT' and re-run '$script_name' to install your system."
+        echo "Drive is ${B}NOT MOUNTED!${N}"
+        echo "Mount your drive in '$MOUNTPOINT' and re-run '$script_name' to install your system."
         exit 1
     fi
 }
