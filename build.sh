@@ -18,8 +18,8 @@ script_path=$(readlink -f ${0%/*})
 umask 0022
 
 # Custom variables
-NEWROOTLOC="$(pwd)"/TEMPMNT
-PKGDBLOC="$(pwd)"/airootfs/etc/skel/pkg
+NEWROOTLOC="$script_path/TEMPMNT"
+PKGDBLOC="$script_path/airootfs/etc/skel/pkg"
 AURHELPER="yay-bin"
 UPDATECACHE=1
 
