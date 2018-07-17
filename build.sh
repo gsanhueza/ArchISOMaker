@@ -294,9 +294,12 @@ revert_aur_helper() {
 
 # Clean-up
 clean_up() {
+    OWNER=${SUDO_USER:-$USER}
+
     revert_aur_helper
     rm work/ -rf
     rm TEMPMNT/ -rf
+    chown $OWNER out/* -v
     mv out/* ..
 }
 
