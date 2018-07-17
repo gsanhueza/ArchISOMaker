@@ -1,3 +1,5 @@
+script_name=${0##*/}
+
 install_system() {
     source /root/packages.sh
 
@@ -201,7 +203,8 @@ check_mounted_drive() {
     if [[ $(findmnt -M "$MOUNTPOINT") ]]; then
         echo "Drive mounted in $MOUNTPOINT."
     else
-        echo "Drive is ${B}NOT MOUNTED!${N} Mount your drive and re-run 'install.sh' to install your system."
+        echo "Drive is ${B}NOT MOUNTED!${N} Mount your drive in '$MOUNTPOINT' and re-run '$script_name' to install your system."
+        exit 1
     fi
 }
 
@@ -224,6 +227,6 @@ case $inst in
         install_system
     ;;
     *)
-        echo "Re-run 'install.sh' to install your system."
+        echo "Re-run '$script_name' to install your system."
     ;;
 esac
