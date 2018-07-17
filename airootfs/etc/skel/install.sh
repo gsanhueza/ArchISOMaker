@@ -1,6 +1,8 @@
 install_system() {
     source /root/packages.sh
 
+    check_mounted_drive
+
     PACKAGES="$BASE $AUR"
 
     # KDE vs GNOME vs i3
@@ -58,8 +60,6 @@ install_system() {
     umount -R /mnt
 
     echo ""
-    echo "*** Syncing drives ***"
-    sync
 
     for i in 0 1 2
     do
@@ -69,6 +69,7 @@ install_system() {
 
     echo "Rebooting now..."
     sleep 1
+    sync
     reboot
 }
 
@@ -192,6 +193,18 @@ customize_env() {
     echo "export DESKTOP_ENV=\"${DESKTOP_ENV}\"" >> /root/env.sh
     echo "export BOOTLOADER=\"${BOOTLOADER}\"" >> /root/env.sh
     echo "export XORG_DRIVERS=\"${XORG_DRIVERS}\"" >> /root/env.sh
+}
+
+check_mounted_drive() {
+    MOUNTPOINT="/mnt"
+    B=$(tput bold)
+    N=$(tput sgr0)
+
+    if [[ $(findmnt -M "$MOUNTPOINT") ]]; then
+        echo "Drive mounted in $MOUNTPOINT."
+    else
+        echo "Drive is ${B}NOT MOUNTED!${n} Mount your drive and re-run 'install.sh' to install your system."
+    fi
 }
 
 ### Main
