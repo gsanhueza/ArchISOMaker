@@ -1,8 +1,6 @@
 install_system() {
     source /root/packages.sh
 
-    check_mounted_drive
-
     PACKAGES="$BASE $AUR"
 
     # KDE vs GNOME vs i3
@@ -203,12 +201,13 @@ check_mounted_drive() {
     if [[ $(findmnt -M "$MOUNTPOINT") ]]; then
         echo "Drive mounted in $MOUNTPOINT."
     else
-        echo "Drive is ${B}NOT MOUNTED!${n} Mount your drive and re-run 'install.sh' to install your system."
+        echo "Drive is ${B}NOT MOUNTED!${N} Mount your drive and re-run 'install.sh' to install your system."
     fi
 }
 
 ### Main
 
+check_mounted_drive
 printf "Do you wish to install now? (Y/n): "
 read inst
 
