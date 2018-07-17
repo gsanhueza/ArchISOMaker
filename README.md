@@ -3,15 +3,13 @@ A custom Arch Linux ISO Maker (Just a bunch of scripts)
 
 ## Instructions
 
-* Login as root
-* Run the command
+* Clone this repo.
+* Run
 ```bash
-# ./build -v
+$ sudo ./build -v
 ```
 * ???
-* Profit!
-
-Your ISO file will be in the parent of this folder.
+* Profit! Your ISO file will be in the parent of this folder.
 
 ## Relevant notes (ISO building)
 
