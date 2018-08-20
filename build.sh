@@ -1,5 +1,4 @@
 #!/bin/bash
-source "$PWD/airootfs/etc/skel/packages.sh"
 
 set -e -u
 iso_name=archlinux
@@ -16,6 +15,8 @@ verbose=""
 script_path=$(readlink -f ${0%/*})
 
 umask 0022
+
+source "$script_path/airootfs/etc/skel/packages.sh"
 
 # Custom variables
 NEWROOTLOC="$script_path/TEMPMNT"
@@ -263,7 +264,7 @@ make_aur_helper() {
 
 # Create Pacman DB
 make_database() {
-    repo-add -n -R $PKGDBLOC/custom.db.tar.gz $PKGDBLOC/*pkg.tar*
+    repo-add -R -n $PKGDBLOC/custom.db.tar.gz $PKGDBLOC/*pkg.tar*
 }
 
 # Make local pkg database and repo only if needed
@@ -281,15 +282,13 @@ make_local_repo() {
     echo "Local repo is ready!"
 }
 
-
-
 # Reverts the adding of an AUR helper, so we can start clean again for the next ISO
 add_aur_helper() {
-    sed -i "s/AUR=\"\"/AUR=\"$AURHELPER\"/g" "$PWD/airootfs/etc/skel/packages.sh"
+    sed -i "s/AUR=\"\"/AUR=\"$AURHELPER\"/g" "$script_path/airootfs/etc/skel/packages.sh"
 }
 
 revert_aur_helper() {
-    sed -i "s/AUR=\"$AURHELPER\"/AUR=\"\"/g" "$PWD/airootfs/etc/skel/packages.sh"
+    sed -i "s/AUR=\"$AURHELPER\"/AUR=\"\"/g" "$script_path/airootfs/etc/skel/packages.sh"
 }
 
 # Clean-up
@@ -298,7 +297,7 @@ clean_up() {
 
     revert_aur_helper
     rm work/ -rf
-    rm TEMPMNT/ -rf
+    rm $NEWROOTLOC -rf
     chown $OWNER out/* -v
     mv out/* ..
 }
