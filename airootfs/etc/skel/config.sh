@@ -95,7 +95,7 @@ install_bootloader()
 
     if [ "$1" == "grub" ]
     then
-    	grub-install /dev/sda --force
+	grub-install $(findmnt / -o SOURCE | tail -n 1 | awk -F'[0-9]' '{ print $1 }') --force
     	grub-mkconfig -o /boot/grub/grub.cfg
     elif [ "$1" == "refind" ]
     then
