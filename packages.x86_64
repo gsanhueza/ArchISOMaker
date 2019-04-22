@@ -60,7 +60,6 @@ vpnc
 wget
 wireless-regdb
 wireless_tools
-wpa_actiond
 wvdial
 xl2tpd
 xorg
