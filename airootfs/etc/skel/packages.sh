@@ -1,5 +1,5 @@
 BASE="base base-devel vim vim-airline vim-fugitive grml-zsh-config gstreamer mpv intel-ucode ttf-hack alsa-utils xorg-server xorg-xinit xf86-input-libinput git unrar unzip p7zip pacman-contrib"
-AUR=""
+AUR="yay-bin"
 XORG="xorg xorg-drivers"
 
 GNOME="gnome gnome-tweak-tool"
