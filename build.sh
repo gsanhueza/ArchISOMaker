@@ -258,7 +258,8 @@ make_download() {
 # Adds an AUR Helper to the ISO
 make_aur_helper() {
     # FIXME Automatize compilation step instead of depending on a (maybe inexistent) file
-    AURHELPERLOC=$(ls -1 /home/gabriel/.cache/yay/$AURHELPER/*pkg.tar* | tail -n 1) 
+    OWNER=${SUDO_USER:-$USER}
+    AURHELPERLOC=$(ls -1 /home/$OWNER/.cache/yay/$AURHELPER/*pkg.tar* | tail -n 1) 
     if [[ -e $AURHELPERLOC ]]; then
         cp $AURHELPERLOC $PKGDBLOC -v
 	# If it exists, add it in AUR in packages.sh
