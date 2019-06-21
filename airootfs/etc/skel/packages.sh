@@ -1,10 +1,10 @@
-BASE="base base-devel vim vim-airline vim-fugitive grml-zsh-config gstreamer mpv intel-ucode ttf-hack alsa-utils xorg-server xorg-xinit xf86-input-libinput git unrar unzip p7zip pacman-contrib"
-AUR="yay-bin"
-XORG="xorg xorg-drivers"
+BASE="base base-devel pacman-contrib vim vim-airline vim-fugitive grml-zsh-config gstreamer mpv intel-ucode ttf-hack alsa-utils xf86-input-libinput git unrar p7zip"
+AUR=""
+XORG="xorg xorg-drivers xorg-server xorg-xinit"
 
 GNOME="gnome gnome-tweak-tool"
-KDE="plasma kdebase okular gwenview ark spectacle smplayer"
-I3="i3 feh mc compton dmenu wpa_supplicant dialog pulseaudio-alsa sddm networkmanager qterminal"
+KDE="plasma kdebase kdegraphics ark smplayer"
+I3="i3 compton dmenu pulseaudio-alsa sddm networkmanager xterm"
 
 REFIND="refind-efi"
 GRUB="grub os-prober"
