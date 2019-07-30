@@ -250,34 +250,23 @@ make_folder() {
 }
 
 # Pull packages from Internet
-# See airootfs/etc/skel/packages.sh
+# See packages.sh
 make_download() {
     pacman -Syw --root $NEWROOTLOC --cachedir $PKGDBLOC --noconfirm $ALL
 }
 
 # Adds an AUR Helper to the ISO
 make_aur_helper() {
-    # We need to temporarily change as non-root for makepkg to work
+    # FIXME Automatize compilation step instead of depending on a (maybe inexistent) file
     OWNER=${SUDO_USER:-$USER}
-
-    if [[ -e /tmp/yay-bin ]]; then
-        rm -rf /tmp/yay-bin
-    fi
-    su $OWNER -c 'git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin'
-
-    cd /tmp/yay-bin
-    su $OWNER -c 'makepkg -s'
-
-    AURHELPERLOC=$(ls -1 *pkg.tar* | tail -n 1)
+    AURHELPERLOC=$(ls -1 /home/$OWNER/.cache/yay/$AURHELPER/*pkg.tar* | tail -n 1) 
     if [[ -e $AURHELPERLOC ]]; then
         cp $AURHELPERLOC $PKGDBLOC -v
-        # If it exists, add it in AUR in packages.sh
-        add_aur_helper $AURHELPER
+	# If it exists, add it in AUR in packages.sh
+	add_aur_helper $AURHELPER
     else
-        revert_aur_helper $AURHELPER
+	revert_aur_helper $AURHELPER
     fi
-
-    cd $script_path
 }
 
 # Create Pacman DB
@@ -288,7 +277,7 @@ make_database() {
 # Make local pkg database and repo only if needed
 make_local_repo() {
     run_once make_folder
-
+    
     if (( UPDATECACHE )); then
         run_once make_download
         run_once make_aur_helper
@@ -362,6 +351,7 @@ run_once make_customize_airootfs
 run_once make_boot
 
 # Do all stuff for "iso"
+
 run_once make_boot_extra
 run_once make_syslinux
 run_once make_isolinux
