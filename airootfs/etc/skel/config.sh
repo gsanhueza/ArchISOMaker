@@ -111,7 +111,7 @@ install_bootloader()
 
     	refind-install
     	REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
-    	echo "\"Boot with standard options\"        \"rw root=${REFIND_UUID} initrd=/boot/intel-ucode.img initrd=/boot/amd-ucode.img initrd=/initramfs-linux.img rcutree.rcu_idle_gp_delay=1 acpi_osi= acpi_backlight=native splash\"" > /boot/refind_linux.conf
+    	echo "\"Boot with standard options\"        \"rw root=${REFIND_UUID} initrd=/intel-ucode.img initrd=/amd-ucode.img initrd=/initramfs-linux.img rcutree.rcu_idle_gp_delay=1 acpi_osi= acpi_backlight=native splash\"" > /boot/refind_linux.conf
     fi
 }
 

@@ -1,4 +1,4 @@
-BASE="base base-devel pacman-contrib vim vim-airline vim-fugitive grml-zsh-config gstreamer mpv intel-ucode ttf-hack alsa-utils xf86-input-libinput git unrar p7zip"
+BASE="base base-devel pacman-contrib vim vim-airline vim-fugitive grml-zsh-config gstreamer mpv intel-ucode amd-ucode ttf-hack alsa-utils xf86-input-libinput git unrar p7zip"
 AUR="yay-bin"
 XORG="xorg xorg-drivers xorg-server xorg-xinit"
 
