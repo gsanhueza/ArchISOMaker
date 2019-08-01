@@ -2,13 +2,6 @@
 
 set -e -u
 
-sed -i 's/#\(es_CL\.UTF-8\)/\1/' /etc/locale.gen
-echo "LANG=es_CL.UTF-8" > /etc/locale.conf
-echo "KEYMAP=la-latin1" > /etc/vconsole.conf
-locale-gen
-
-ln -sf /usr/share/zoneinfo/America/Santiago /etc/localtime
-
 usermod -s /usr/bin/zsh root
 cp -aT /etc/skel/ /root/
 mv /root/pacman_on_iso.conf /etc/pacman.conf

@@ -3,7 +3,7 @@ source /root/env.sh
 set_zoneinfo()
 {
     echo "+++ Linking zoneinfo... +++"
-    ln -s /usr/share/zoneinfo/$1 /etc/localtime -f
+    ln -s /usr/share/zoneinfo/$ZONEINFO /etc/localtime -f
 }
 
 enable_utc()
@@ -15,17 +15,17 @@ enable_utc()
 set_language()
 {
     echo "+++ Enabling language and keymap... +++"
-    sed -i "s/#\($1\.UTF-8\)/\1/" /etc/locale.gen
-    echo "LANG=$1.UTF-8" > /etc/locale.conf
-    echo "KEYMAP=la-latin1" > /etc/vconsole.conf
+    sed -i "s/#\($LANGUAGE\.UTF-8\)/\1/" /etc/locale.gen
+    echo "LANG=$LANGUAGE.UTF-8" > /etc/locale.conf
+    echo "KEYMAP=$KEYMAP" > /etc/vconsole.conf
     locale-gen
 }
 
 set_hostname()
 {
     echo ""
-    echo "+++ Creating hostname" $1 "... +++"
-    echo $1 > /etc/hostname
+    echo "+++ Creating hostname $HOSTNAME ... +++"
+    echo $HOSTNAME > /etc/hostname
 }
 
 enable_networking()
@@ -73,31 +73,31 @@ configure_root_account()
 set_user_account()
 {
     echo ""
-    echo "+++ Creating" $1 "account... +++"
-    useradd -m -G wheel -s /bin/zsh "$1"
-    passwd "$1"
+    echo "+++ Creating $USERNAME account... +++"
+    useradd -m -G wheel -s /bin/zsh $USERNAME
+    passwd $USERNAME
 
     while (( $? != 0 )); do
         echo ""
         echo "Try again!"
-        passwd "$1"
+        passwd $USERNAME
     done
 
     echo ""
-    echo "+++ Enabling sudo for" $1 "... +++"
+    echo "+++ Enabling sudo for $USERNAME ... +++"
     sed -i 's/^#\s*\(%wheel\s\+ALL=(ALL)\s\ALL\)/\1/' /etc/sudoers
 }
 
 install_bootloader()
 {
     echo ""
-    echo "+++ Installing" $1 "bootloader... +++"
+    echo "+++ Installing $BOOTLOADER bootloader... +++"
 
-    if [ "$1" == "grub" ]
+    if [ "$BOOTLOADER" == "grub" ]
     then
 	grub-install $(findmnt / -o SOURCE | tail -n 1 | awk -F'[0-9]' '{ print $1 }') --force
     	grub-mkconfig -o /boot/grub/grub.cfg
-    elif [ "$1" == "refind" ]
+    elif [ "$BOOTLOADER" == "refind" ]
     then
 	# Bait refind-install into thinking that a refind install already exists,
 	# so it will "upgrade" (install) in default location /boot/EFI/refind
@@ -111,20 +111,20 @@ install_bootloader()
 
     	refind-install
     	REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
-    	echo "\"Boot with standard options\"        \"rw root=${REFIND_UUID} initrd=/intel-ucode.img initrd=/initramfs-linux.img rcutree.rcu_idle_gp_delay=1 acpi_osi= acpi_backlight=native splash\"" > /boot/refind_linux.conf
+    	echo "\"Boot with standard options\"        \"rw root=${REFIND_UUID} initrd=/boot/intel-ucode.img initrd=/boot/amd-ucode.img initrd=/initramfs-linux.img rcutree.rcu_idle_gp_delay=1 acpi_osi= acpi_backlight=native splash\"" > /boot/refind_linux.conf
     fi
 }
 
-set_zoneinfo "America/Santiago"
+set_zoneinfo
 enable_utc
-set_language $LANGUAGE
-set_hostname $HOSTNAME
+set_language
+set_hostname
 enable_networking
 enable_desktop_manager
 make_linux_image
 configure_root_account
-set_user_account $USERNAME
-install_bootloader $BOOTLOADER
+set_user_account
+install_bootloader
 
 echo ""
 echo "+++++++++++++++++++++++++++++++++++++++++++++++"

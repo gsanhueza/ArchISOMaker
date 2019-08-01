@@ -48,14 +48,13 @@ install_system() {
     pacstrap /mnt $PACKAGES --cachedir=/root/pkg --needed
 
     genfstab -p -U /mnt > /mnt/etc/fstab
-    cp /root/pacman_on_installation.conf /mnt/etc/pacman.conf -v
     cp /root/mirrorlist /mnt/etc/pacman.d/mirrorlist -v
 
     cp /root/env.sh /mnt/root -v
     cp /root/config.sh /mnt/root -v
 
     echo ""
-    echo "*** Now configuring your system with ${DESKTOP_ENV}, ${BOOTLOADER} and ${XORG_DRIVERS}... ***"
+    echo "*** Now configuring your system with $DESKTOP_ENV, $BOOTLOADER and $XORG_DRIVERS... ***"
     arch-chroot /mnt /bin/zsh -c "cd && ./config.sh && rm config.sh env.sh -f"
     umount -R /mnt
 
@@ -77,15 +76,15 @@ customize_env() {
     source /root/env.sh
 
     echo "I'll now ask for data needed to install your system."
-    echo "If you leave it blank, it will just use defaults."
+    echo "If you leave it blank, it will just use the defaults set in the 'env.sh' file."
     echo ""
 
     # Name
-    printf "Write your name (default=${USERNAME}): "
+    printf "Write your name (default=$USERNAME): "
     read ans
     case $ans in
         '')
-            USERNAME="${USERNAME}"
+            USERNAME="$USERNAME"
         ;;
         *)
             USERNAME=$ans
@@ -97,7 +96,7 @@ customize_env() {
     read ans
     case $ans in
         '')
-            HOSTNAME="${HOSTNAME}"
+            HOSTNAME="$HOSTNAME"
         ;;
         *)
             HOSTNAME=$ans
@@ -105,24 +104,48 @@ customize_env() {
     esac
 
     # Language
-    printf "Write your chosen language (default=${LANGUAGE}): "
+    printf "Write your chosen language (default=$LANGUAGE): "
     read ans
     case $ans in
         '')
-            LANGUAGE="${LANGUAGE}"
+            LANGUAGE="$LANGUAGE"
         ;;
         *)
             LANGUAGE=$ans
         ;;
     esac
 
+    # Keymap
+    printf "Write your chosen keymap (default=$KEYMAP): "
+    read ans
+    case $ans in
+        '')
+            KEYMAP="$KEYMAP"
+        ;;
+        *)
+            KEYMAP=$ans
+        ;;
+    esac
+
+    # Zoneinfo
+    printf "Write your chosen zoneinfo (default=$ZONEINFO): "
+    read ans
+    case $ans in
+        '')
+            ZONEINFO="$ZONEINFO"
+        ;;
+        *)
+            ZONEINFO=$ans
+        ;;
+    esac
+
     # Desktop environment
-    echo "Choose your Desktop Environment (default=${DESKTOP_ENV})"
+    echo "Choose your Desktop Environment (default=$DESKTOP_ENV)"
     printf "(1) KDE    (2) GNOME    (3) i3: "
     read ans
     case $ans in
         '')
-            DESKTOP_ENV="${DESKTOP_ENV}"
+            DESKTOP_ENV="$DESKTOP_ENV"
         ;;
         '1')
             DESKTOP_ENV="KDE"
@@ -140,12 +163,12 @@ customize_env() {
     esac
 
     # Bootloader
-    echo "Choose your Bootloader (default=${BOOTLOADER})"
+    echo "Choose your Bootloader (default=$BOOTLOADER)"
     printf "(1) rEFInd    (2) GRUB: "
     read ans
     case $ans in
         '')
-            BOOTLOADER="${BOOTLOADER}"
+            BOOTLOADER="$BOOTLOADER"
         ;;
         '1')
             BOOTLOADER="refind"
@@ -160,12 +183,12 @@ customize_env() {
     esac
 
     # Xorg Drivers
-    echo "Choose your Graphic Drivers (default=${XORG_DRIVERS})"
+    echo "Choose your Graphic Drivers (default=$XORG_DRIVERS)"
     printf "(1) nVidia    (2) AMD    (3) VBox    (4) Intel: "
     read ans
     case $ans in
         '')
-            XORG_DRIVERS="${XORG_DRIVERS}"
+            XORG_DRIVERS="$XORG_DRIVERS"
         ;;
         '1')
             XORG_DRIVERS="nvidia"
@@ -187,12 +210,14 @@ customize_env() {
 
     echo '' > /root/env.sh
 
-    echo "export USERNAME=\"${USERNAME}\"" >> /root/env.sh
-    echo "export HOSTNAME=\"${HOSTNAME}\"" >> /root/env.sh
-    echo "export LANGUAGE=\"${LANGUAGE}\"" >> /root/env.sh
-    echo "export DESKTOP_ENV=\"${DESKTOP_ENV}\"" >> /root/env.sh
-    echo "export BOOTLOADER=\"${BOOTLOADER}\"" >> /root/env.sh
-    echo "export XORG_DRIVERS=\"${XORG_DRIVERS}\"" >> /root/env.sh
+    echo "export USERNAME=$USERNAME" >> /root/env.sh
+    echo "export HOSTNAME=$HOSTNAME" >> /root/env.sh
+    echo "export LANGUAGE=$LANGUAGE" >> /root/env.sh
+    echo "export KEYMAP=$KEYMAP" >> /root/env.sh
+    echo "export ZONEINFO=$ZONEINFO" >> /root/env.sh
+    echo "export DESKTOP_ENV=$DESKTOP_ENV" >> /root/env.sh
+    echo "export BOOTLOADER=$BOOTLOADER" >> /root/env.sh
+    echo "export XORG_DRIVERS=$XORG_DRIVERS" >> /root/env.sh
 }
 
 check_mounted_drive() {
