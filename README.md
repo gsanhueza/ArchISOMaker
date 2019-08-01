@@ -4,7 +4,7 @@ A custom Arch Linux ISO Maker (Just a bunch of scripts)
 ## Instructions
 
 * Clone this repo.
-* Run `$ sudo ./build -v`
+* Run `$ ./generate_iso.sh -v`
 * ???
 * Profit! Your ISO file will be in the parent of this folder.
 
