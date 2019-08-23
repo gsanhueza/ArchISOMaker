@@ -271,11 +271,16 @@ make_aur_helper() {
 
 # Create Pacman DB
 make_database() {
-    repo-add -R -n $PKGDBLOC/custom.db.tar.gz $PKGDBLOC/*pkg.tar*
+    n=0
+
     # If the command didn't run correctly, re-run. It solves the file-not-found error. Go figure.
-    if [[ $? -ne 0 ]]; then
-	repo-add -R -n $PKGDBLOC/custom.db.tar.gz $PKGDBLOC/*pkg.tar*
-    fi
+    # We'll re-run the command up to 5 times.
+    until [ $n -ge 5 ]
+    do
+        repo-add -R -n $PKGDBLOC/custom.db.tar.gz $PKGDBLOC/*pkg.tar* && break  # If commmand ran ok, don't re-run
+        n=$[$n+1]
+        sleep 1
+    done
 }
 
 # Make local pkg database and repo only if needed
