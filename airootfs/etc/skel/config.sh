@@ -37,15 +37,12 @@ enable_networking()
 enable_desktop_manager()
 {
     echo "+++ Enabling display manager... +++"
-    if [ $DESKTOP_ENV == "KDE" ]
-    then
-    	systemctl enable sddm.service
-    elif [ $DESKTOP_ENV == "GNOME" ]
-    then
-    	systemctl enable gdm.service
-    elif [ $DESKTOP_ENV == "i3" ]
-    then
-    	systemctl enable sddm.service
+    if [ $DESKTOP_ENV == "KDE" ]; then
+        systemctl enable sddm.service
+    elif [ $DESKTOP_ENV == "GNOME" ]; then
+        systemctl enable gdm.service
+    elif [ $DESKTOP_ENV == "i3" ]; then
+        systemctl enable sddm.service
     fi
 }
 
@@ -93,25 +90,24 @@ install_bootloader()
     echo ""
     echo "+++ Installing $BOOTLOADER bootloader... +++"
 
-    if [ "$BOOTLOADER" == "grub" ]
-    then
-	grub-install $(findmnt / -o SOURCE | tail -n 1 | awk -F'[0-9]' '{ print $1 }') --force
-    	grub-mkconfig -o /boot/grub/grub.cfg
-    elif [ "$BOOTLOADER" == "refind" ]
-    then
-	# Bait refind-install into thinking that a refind install already exists,
-	# so it will "upgrade" (install) in default location /boot/EFI/refind
-	# This is done to avoid moving Microsoft's original bootloader.
+    if [ "$BOOTLOADER" == "grub" ]; then
+        grub-install $(findmnt / -o SOURCE | tail -n 1 | awk -F'[0-9]' '{ print $1 }') --force
+        grub-mkconfig -o /boot/grub/grub.cfg
+    elif [ "$BOOTLOADER" == "refind" ]; then
+        # Bait refind-install into thinking that a refind install already exists,
+        # so it will "upgrade" (install) in default location /boot/EFI/refind
+        # This is done to avoid moving Microsoft's original bootloader.
 
-	# Comment the following two lines if you have an HP computer
-	# (suboptimal EFI implementation), or you don't mind moving
-	# the original bootloader.
-   	mkdir -p /boot/EFI/refind
-	cp /usr/share/refind/refind.conf-sample /boot/EFI/refind/refind.conf
+        # Comment the following two lines if you have an HP computer
+        # (suboptimal EFI implementation), or you don't mind moving
+        # the original bootloader.
+        mkdir -p /boot/EFI/refind
+        cp /usr/share/refind/refind.conf-sample /boot/EFI/refind/refind.conf
 
-    	refind-install
-    	REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
-    	echo "\"Boot with standard options\"        \"rw root=${REFIND_UUID} initrd=/intel-ucode.img initrd=/amd-ucode.img initrd=/initramfs-linux.img rcutree.rcu_idle_gp_delay=1 acpi_osi= acpi_backlight=native splash\"" > /boot/refind_linux.conf
+        refind-install
+        REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
+        echo "\"Boot with standard options\"        \"rw root=${REFIND_UUID} initrd=/intel-ucode.img initrd=/amd-ucode.img initrd=/initramfs-linux.img\"" > /boot/refind_linux.conf
+        echo "\"Boot with ASUS options\"        \"rw root=${REFIND_UUID} initrd=/intel-ucode.img initrd=/amd-ucode.img initrd=/initramfs-linux.img rcutree.rcu_idle_gp_delay=1 acpi_osi= acpi_backlight=native\"" >> /boot/refind_linux.conf
     fi
 }
 
