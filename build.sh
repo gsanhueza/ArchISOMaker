@@ -22,7 +22,6 @@ source "$script_path/airootfs/etc/skel/packages.sh"
 # Custom variables
 NEWROOTLOC="$script_path/TEMPMNT"
 PKGDBLOC="$script_path/airootfs/etc/skel/pkg"
-AURHELPER="yay-bin"
 UPDATECACHE=1
 
 _usage ()
@@ -255,20 +254,6 @@ make_download() {
     pacman -Syw --root $NEWROOTLOC --cachedir $PKGDBLOC --noconfirm $ALL
 }
 
-# Adds an AUR Helper to the ISO
-make_aur_helper() {
-    # This assumes you have $AURHELPER installed via yay, if not, it won't appear in the ISO
-    OWNER=${SUDO_USER:-$USER}
-    AURHELPERLOC=$(ls -1 /home/$OWNER/.cache/yay/$AURHELPER/*pkg.tar* | tail -n 1) 
-    if [[ -e $AURHELPERLOC ]]; then
-        cp $AURHELPERLOC $PKGDBLOC -v
-	# If it exists, add it in AUR in packages.sh
-	add_aur_helper $AURHELPER
-    else
-	revert_aur_helper $AURHELPER
-    fi
-}
-
 # Create Pacman DB
 make_database() {
     n=0
@@ -289,7 +274,6 @@ make_local_repo() {
     
     if (( UPDATECACHE )); then
         run_once make_download
-        run_once make_aur_helper
         run_once make_database
     fi
     sync
@@ -298,20 +282,10 @@ make_local_repo() {
     echo "Local repo is ready!"
 }
 
-# Reverts the adding of an AUR helper, so we can start clean again for the next ISO
-add_aur_helper() {
-    sed -i "s/AUR=\"\"/AUR=\"$AURHELPER\"/g" "$script_path/airootfs/etc/skel/packages.sh"
-}
-
-revert_aur_helper() {
-    sed -i "s/AUR=\"$AURHELPER\"/AUR=\"\"/g" "$script_path/airootfs/etc/skel/packages.sh"
-}
-
 # Clean-up
 clean_up() {
     OWNER=${SUDO_USER:-$USER}
 
-    revert_aur_helper
     rm work/ -rf
     rm $NEWROOTLOC -rf
     chown $OWNER out/* -v

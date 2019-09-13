@@ -83,6 +83,11 @@ set_user_account()
     echo ""
     echo "+++ Enabling sudo for $USERNAME ... +++"
     sed -i 's/^#\s*\(%wheel\s\+ALL=(ALL)\s\ALL\)/\1/' /etc/sudoers
+
+    echo ""
+    echo "+++ Moving AUR Helper instalation script to user folder... +++"
+    mv /root/yay_install.sh /home/$USERNAME/ -v
+    chown $USERNAME:$USERNAME /home/$USERNAME/yay_install.sh -v
 }
 
 install_bootloader()

@@ -2,8 +2,7 @@ script_name=${0##*/}
 
 install_system() {
     source /root/packages.sh
-
-    PACKAGES="$BASE $AUR"
+    PACKAGES=$BASE
 
     # KDE vs GNOME vs i3
     echo "*** Installing ${DESKTOP_ENV}... ***"
@@ -52,6 +51,7 @@ install_system() {
 
     cp /root/env.sh /mnt/root -v
     cp /root/config.sh /mnt/root -v
+    cp /root/yay_install.sh /mnt/root -v
 
     echo ""
     echo "*** Now configuring your system with $DESKTOP_ENV, $BOOTLOADER and $XORG_DRIVERS... ***"
