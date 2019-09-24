@@ -104,7 +104,7 @@ make_setup_mkinitcpio() {
 make_customize_airootfs() {
     cp -af ${script_path}/airootfs ${work_dir}/x86_64
 
-#   cp ${script_path}/pacman.conf ${work_dir}/x86_64/airootfs/etc
+    cp ${script_path}/pacman.conf ${work_dir}/x86_64/airootfs/etc
 
     curl -o ${work_dir}/x86_64/airootfs/etc/pacman.d/mirrorlist 'https://www.archlinux.org/mirrorlist/?country=all&protocol=http&use_mirror_status=on'
 
@@ -319,33 +319,18 @@ done
 
 mkdir -p ${work_dir}
 
-#### Main script ####
-
-# Create new local repo
 run_once make_local_repo
 run_once make_pacman_conf
-
-# Do all initial stuff
 run_once make_basefs
 run_once make_packages
-
 run_once make_setup_mkinitcpio
 run_once make_customize_airootfs
 run_once make_boot
-
-# Do all stuff for "iso"
-
 run_once make_boot_extra
 run_once make_syslinux
 run_once make_isolinux
 run_once make_efi
 run_once make_efiboot
-
 run_once make_prepare
-
-# Create ISO
 run_once make_iso
-
-# Clean-up routine
 clean_up
-
