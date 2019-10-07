@@ -2,7 +2,7 @@ script_name=${0##*/}
 
 install_system() {
     source /root/packages.sh
-    PACKAGES=$BASE
+    PACKAGES="$BASE $UTILS"
 
     # KDE vs GNOME vs i3
     echo "*** Installing ${DESKTOP_ENV}... ***"
