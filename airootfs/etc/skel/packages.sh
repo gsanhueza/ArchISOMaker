@@ -11,7 +11,7 @@ GRUB="grub os-prober"
 
 NVIDIA="nvidia bumblebee"
 AMD="xf86-video-amdgpu"
-VBOX="virtualbox-guest-modules-arch virtualbox-guest-utils"
+VBOX="virtualbox-guest-utils"
 INTEL=""
 
 ALL="$BASE $UTILS $XORG $GNOME $KDE $I3 $REFIND $GRUB $NVIDIA $AMD $VBOX $INTEL"
