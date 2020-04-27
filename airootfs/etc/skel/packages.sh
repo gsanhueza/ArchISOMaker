@@ -4,12 +4,12 @@ XORG="xorg xorg-drivers xorg-server xorg-xinit"
 
 GNOME="gnome gnome-tweak-tool"
 KDE="plasma kdebase kdegraphics ark smplayer"
-I3="i3 compton dmenu pulseaudio-alsa sddm xterm"
+I3="i3 picom dmenu pulseaudio-alsa sddm xterm"
 
 REFIND="refind"
 GRUB="grub os-prober"
 
-NVIDIA="nvidia bumblebee"
+NVIDIA="nvidia"
 AMD="xf86-video-amdgpu"
 VBOX="virtualbox-guest-utils"
 INTEL=""
