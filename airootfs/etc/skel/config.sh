@@ -1,4 +1,8 @@
-source /root/env.sh
+#!/bin/bash
+
+ENVFILE="env.sh"
+
+source /root/$ENVFILE
 
 set_zoneinfo()
 {
@@ -90,48 +94,66 @@ set_user_account()
     chown $USERNAME:$USERNAME /home/$USERNAME/yay_install.sh -v
 }
 
+install_grub()
+{
+    grub-install $(findmnt / -o SOURCE | tail -n 1 | awk -F'[0-9]' '{ print $1 }') --force
+    grub-mkconfig -o /boot/grub/grub.cfg
+}
+
+install_refind()
+{
+    # Bait refind-install into thinking that a refind install already exists,
+    # so it will "upgrade" (install) in default location /boot/EFI/refind
+    # This is done to avoid moving Microsoft's original bootloader.
+
+    # Comment the following two lines if you have an HP computer
+    # (suboptimal EFI implementation), or you don't mind moving
+    # the original bootloader.
+    mkdir -p /boot/EFI/refind
+    cp /usr/share/refind/refind.conf-sample /boot/EFI/refind/refind.conf
+
+    refind-install
+    REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
+    echo "\"Boot with standard options\"        \"root=${REFIND_UUID} rw initrd=/intel-ucode.img initrd=/amd-ucode.img initrd=/initramfs-linux.img\"" > /boot/refind_linux.conf
+    echo "\"Boot with ASUS options\"        \"root=${REFIND_UUID} rw initrd=/intel-ucode.img initrd=/amd-ucode.img initrd=/initramfs-linux.img acpi_osi= acpi_backlight=native\"" >> /boot/refind_linux.conf
+}
+
 install_bootloader()
 {
     echo ""
     echo "+++ Installing $BOOTLOADER bootloader... +++"
 
     if [ "$BOOTLOADER" == "grub" ]; then
-        grub-install $(findmnt / -o SOURCE | tail -n 1 | awk -F'[0-9]' '{ print $1 }') --force
-        grub-mkconfig -o /boot/grub/grub.cfg
+        install_grub
     elif [ "$BOOTLOADER" == "refind" ]; then
-        # Bait refind-install into thinking that a refind install already exists,
-        # so it will "upgrade" (install) in default location /boot/EFI/refind
-        # This is done to avoid moving Microsoft's original bootloader.
-
-        # Comment the following two lines if you have an HP computer
-        # (suboptimal EFI implementation), or you don't mind moving
-        # the original bootloader.
-        mkdir -p /boot/EFI/refind
-        cp /usr/share/refind/refind.conf-sample /boot/EFI/refind/refind.conf
-
-        refind-install
-        REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
-        echo "\"Boot with standard options\"        \"rw root=${REFIND_UUID} initrd=/intel-ucode.img initrd=/amd-ucode.img initrd=/initramfs-linux.img\"" > /boot/refind_linux.conf
-        echo "\"Boot with ASUS options\"        \"rw root=${REFIND_UUID} initrd=/intel-ucode.img initrd=/amd-ucode.img initrd=/initramfs-linux.img acpi_osi= acpi_backlight=native\"" >> /boot/refind_linux.conf
+        install_refind
     fi
 }
 
-set_zoneinfo
-enable_utc
-set_language
-set_hostname
-enable_networking
-enable_desktop_manager
-make_linux_image
-configure_root_account
-set_user_account
-install_bootloader
+prompt_finished()
+{
+    echo ""
+    echo "+++++++++++++++++++++++++++++++++++++++++++++++"
+    echo "+++                                         +++"
+    echo "+++  Finished! Will reboot in 3 seconds...  +++"
+    echo "+++                                         +++"
+    echo "+++++++++++++++++++++++++++++++++++++++++++++++"
+}
 
-echo ""
-echo "+++++++++++++++++++++++++++++++++++++++++++++++"
-echo "+++                                         +++"
-echo "+++  Finished! Will reboot in 3 seconds...  +++"
-echo "+++                                         +++"
-echo "+++++++++++++++++++++++++++++++++++++++++++++++"
-exit
+main()
+{
+    set_zoneinfo
+    enable_utc
+    set_language
+    set_hostname
+    enable_networking
+    enable_desktop_manager
+    make_linux_image
+    configure_root_account
+    set_user_account
+    install_bootloader
+    prompt_finished
+}
 
+# Execute main
+main

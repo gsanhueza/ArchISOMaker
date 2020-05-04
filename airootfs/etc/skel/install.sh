@@ -1,63 +1,97 @@
-script_name=${0##*/}
+#!/bin/bash
 
-install_system() {
-    source /root/packages.sh
-    PACKAGES="$BASE $UTILS"
+SCRIPTFILE=${0##*/}
+PKGFILE="packages.sh"
+ENVFILE="env.sh"
+CONFFILE="config.sh"
 
+source $ENVFILE
+source $PKGFILE
+
+select_desktop_environment()
+{
     # KDE vs GNOME vs i3
-    echo "*** Installing ${DESKTOP_ENV}... ***"
+    echo "*** Selecting ${DESKTOP_ENV}... ***"
+
     if [ $DESKTOP_ENV == "KDE" ]
     then
-        PACKAGES="$PACKAGES $KDE"
+        export PACKAGES="$PACKAGES $KDE"
     elif [ $DESKTOP_ENV == "GNOME" ]
     then
-        PACKAGES="$PACKAGES $GNOME"
+        export PACKAGES="$PACKAGES $GNOME"
     elif [ $DESKTOP_ENV == "i3" ]
     then
-	PACKAGES="$PACKAGES $I3"
+        export PACKAGES="$PACKAGES $I3"
     fi
+}
 
+select_bootloader()
+{
     # rEFInd vs GRUB
-    echo "*** Installing ${BOOTLOADER}... ***"
+    echo "*** Selecting ${BOOTLOADER}... ***"
+
     if [[ $BOOTLOADER == "refind" ]]
     then
-        PACKAGES="$PACKAGES $REFIND"
+        export PACKAGES="$PACKAGES $REFIND"
     elif [[ $BOOTLOADER == "grub" ]]
     then
-        PACKAGES="$PACKAGES $GRUB"
+        export PACKAGES="$PACKAGES $GRUB"
     fi
+}
 
-    # nVidia vs AMD vs VBox
-    echo "*** Installing ${XORG_DRIVERS} drivers... ***"
+select_video_drivers()
+{
+    # nVidia vs AMD vs VBox vs Intel
+    echo "*** Selecting ${XORG_DRIVERS} drivers... ***"
+
     if [[ $XORG_DRIVERS == "nvidia" ]]
     then
-        PACKAGES="$PACKAGES $NVIDIA"
+        export PACKAGES="$PACKAGES $NVIDIA"
     elif [[ $XORG_DRIVERS == "amd" ]]
     then
-        PACKAGES="$PACKAGES $AMD"
+        export PACKAGES="$PACKAGES $AMD"
     elif [[ $XORG_DRIVERS == "vbox" ]]
     then
-        PACKAGES="$PACKAGES $VBOX"
+        export PACKAGES="$PACKAGES $VBOX"
     elif [[ $XORG_DRIVERS == "intel" ]]
     then
-        PACKAGES="$PACKAGES $INTEL"
+        export PACKAGES="$PACKAGES $INTEL"
     fi
+}
 
+install_packages()
+{
     # Installing here
     pacstrap /mnt $PACKAGES --cachedir=/root/pkg --needed
+}
 
+generate_fstab()
+{
     genfstab -p -U /mnt > /mnt/etc/fstab
-    cp /root/mirrorlist /mnt/etc/pacman.d/mirrorlist -v
+}
 
-    cp /root/env.sh /mnt/root -v
-    cp /root/config.sh /mnt/root -v
-    cp /root/yay_install.sh /mnt/root -v
+copy_mirrorlist()
+{
+    cp mirrorlist /mnt/etc/pacman.d/mirrorlist -v
+}
 
+copy_scripts()
+{
+    cp $ENVFILE /mnt/root -v
+    cp $CONFFILE /mnt/root -v
+    cp yay_install.sh /mnt/root -v
+}
+
+configure_system()
+{
     echo ""
     echo "*** Now configuring your system with $DESKTOP_ENV, $BOOTLOADER and $XORG_DRIVERS... ***"
-    arch-chroot /mnt /bin/zsh -c "cd && ./config.sh && rm config.sh env.sh -f"
-    umount -R /mnt
+    arch-chroot /mnt /bin/zsh -c "cd && ./$CONFFILE && rm $CONFFILE $ENVFILE -f"
+}
 
+reboot_system()
+{
+    umount -R /mnt
     echo ""
 
     for i in 0 1 2
@@ -72,152 +106,181 @@ install_system() {
     reboot
 }
 
-customize_env() {
-    source /root/env.sh
-
-    echo "I'll now ask for data needed to install your system."
-    echo "If you leave it blank, it will just use the defaults set in the 'env.sh' file."
-    echo ""
-
-    # Name
+prompt_username()
+{
     printf "Write your name (default=$USERNAME): "
     read ans
     case $ans in
         '')
-            USERNAME="$USERNAME"
+            return
         ;;
         *)
-            USERNAME=$ans
+            export USERNAME=$ans
         ;;
     esac
+}
 
-    # Hostname
+prompt_hostname()
+{
     printf "Write your hostname (default=${HOSTNAME}): "
     read ans
     case $ans in
         '')
-            HOSTNAME="$HOSTNAME"
+            return
         ;;
         *)
-            HOSTNAME=$ans
+            export HOSTNAME=$ans
         ;;
     esac
+}
 
-    # Language
+prompt_language()
+{
     printf "Write your chosen language (default=$LANGUAGE): "
     read ans
     case $ans in
         '')
-            LANGUAGE="$LANGUAGE"
+            return
         ;;
         *)
-            LANGUAGE=$ans
+            export LANGUAGE=$ans
         ;;
     esac
+}
 
+prompt_keymap()
+{
     # Keymap
     printf "Write your chosen keymap (default=$KEYMAP): "
     read ans
     case $ans in
         '')
-            KEYMAP="$KEYMAP"
+            return
         ;;
         *)
-            KEYMAP=$ans
+            export KEYMAP=$ans
         ;;
     esac
+}
 
-    # Zoneinfo
+prompt_zoneinfo()
+{
     printf "Write your chosen zoneinfo (default=$ZONEINFO): "
     read ans
     case $ans in
         '')
-            ZONEINFO="$ZONEINFO"
+            return
         ;;
         *)
-            ZONEINFO=$ans
+            export ZONEINFO=$ans
         ;;
     esac
+}
 
+prompt_desktop_environment()
+{
     # Desktop environment
     echo "Choose your Desktop Environment (default=$DESKTOP_ENV)"
     printf "(1) KDE    (2) GNOME    (3) i3: "
     read ans
     case $ans in
         '')
-            DESKTOP_ENV="$DESKTOP_ENV"
+            return
         ;;
         '1')
-            DESKTOP_ENV="KDE"
+            export DESKTOP_ENV="KDE"
         ;;
         '2')
-            DESKTOP_ENV="GNOME"
+            export DESKTOP_ENV="GNOME"
         ;;
-	'3')
-	    DESKTOP_ENV="i3"
-	;;
+        '3')
+            export DESKTOP_ENV="i3"
+        ;;
         *)
             echo "Wrong choice, halting now!"
             exit 1
         ;;
     esac
+}
 
-    # Bootloader
+prompt_bootloader()
+{
     echo "Choose your Bootloader (default=$BOOTLOADER)"
     printf "(1) rEFInd    (2) GRUB: "
     read ans
     case $ans in
         '')
-            BOOTLOADER="$BOOTLOADER"
+            return
         ;;
         '1')
-            BOOTLOADER="refind"
+            export BOOTLOADER="refind"
         ;;
         '2')
-            BOOTLOADER="grub"
+            export BOOTLOADER="grub"
         ;;
         *)
             echo "Wrong choice, halting now!"
             exit 1
         ;;
     esac
+}
 
-    # Xorg Drivers
+prompt_video_drivers()
+{
     echo "Choose your Graphic Drivers (default=$XORG_DRIVERS)"
     printf "(1) nVidia    (2) AMD    (3) VBox    (4) Intel: "
     read ans
     case $ans in
         '')
-            XORG_DRIVERS="$XORG_DRIVERS"
+            return
         ;;
         '1')
-            XORG_DRIVERS="nvidia"
+            export XORG_DRIVERS="nvidia"
         ;;
         '2')
-            XORG_DRIVERS="amd"
+            export XORG_DRIVERS="amd"
         ;;
         '3')
-            XORG_DRIVERS="vbox"
+            export XORG_DRIVERS="vbox"
         ;;
         '4')
-            XORG_DRIVERS="intel"
+            export XORG_DRIVERS="intel"
         ;;
         *)
             echo "Wrong choice, halting now!"
             exit 1
         ;;
     esac
+}
 
-    echo '' > /root/env.sh
+export_environment()
+{
+    # First 'echo' uses a single ">" because we want to re-write the file
+    echo "USERNAME=$USERNAME" > $ENVFILE
+    echo "HOSTNAME=$HOSTNAME" >> $ENVFILE
+    echo "LANGUAGE=$LANGUAGE" >> $ENVFILE
+    echo "KEYMAP=$KEYMAP" >> $ENVFILE
+    echo "ZONEINFO=$ZONEINFO" >> $ENVFILE
+    echo "DESKTOP_ENV=$DESKTOP_ENV" >> $ENVFILE
+    echo "BOOTLOADER=$BOOTLOADER" >> $ENVFILE
+    echo "XORG_DRIVERS=$XORG_DRIVERS" >> $ENVFILE
+}
 
-    echo "export USERNAME=$USERNAME" >> /root/env.sh
-    echo "export HOSTNAME=$HOSTNAME" >> /root/env.sh
-    echo "export LANGUAGE=$LANGUAGE" >> /root/env.sh
-    echo "export KEYMAP=$KEYMAP" >> /root/env.sh
-    echo "export ZONEINFO=$ZONEINFO" >> /root/env.sh
-    echo "export DESKTOP_ENV=$DESKTOP_ENV" >> /root/env.sh
-    echo "export BOOTLOADER=$BOOTLOADER" >> /root/env.sh
-    echo "export XORG_DRIVERS=$XORG_DRIVERS" >> /root/env.sh
+customize_env() {
+    echo "I'll now ask for data needed to install your system."
+    echo "If you leave it blank, it will just use the defaults set in '$ENVFILE'."
+    echo ""
+
+    prompt_username
+    prompt_hostname
+    prompt_language
+    prompt_keymap
+    prompt_zoneinfo
+    prompt_desktop_environment
+    prompt_bootloader
+    prompt_video_drivers
+
+    export_environment
 }
 
 check_mounted_drive() {
@@ -229,30 +292,44 @@ check_mounted_drive() {
         echo "Drive mounted in $MOUNTPOINT."
     else
         echo "Drive is ${B}NOT MOUNTED!${N}"
-        echo "Mount your drive in '$MOUNTPOINT' and re-run '$script_name' to install your system."
+        echo "Mount your drive in '$MOUNTPOINT' and re-run '$SCRIPTFILE' to install your system."
         exit 1
     fi
 }
 
-### Main
+prompt_customize()
+{
+    printf "Do you want to use defaults? (See $ENVFILE) (Y/n): "
+    read defaults
+    case $defaults in
+        'n'|'N')
+            customize_env
+        ;;
+    esac
+}
 
-check_mounted_drive
-printf "Do you wish to install now? (Y/n): "
-read inst
+install_system()
+{
+    select_desktop_environment
+    select_bootloader
+    select_video_drivers
 
-case $inst in
-    ''|'y'|'Y')
-        printf "Do you want to use defaults? (See env.sh) (Y/n): "
-        read defaults
-        case $defaults in
-            'n'|'N')
-                customize_env
-            ;;
-        esac
-        source /root/env.sh
-        install_system
-    ;;
-    *)
-        echo "Re-run '$script_name' to install your system."
-    ;;
-esac
+    install_packages
+    generate_fstab
+
+    copy_mirrorlist
+    copy_scripts
+
+    configure_system
+    reboot_system
+}
+
+main()
+{
+    check_mounted_drive
+    prompt_customize
+    install_system
+}
+
+# Execute main
+main
