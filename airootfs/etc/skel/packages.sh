@@ -1,18 +1,40 @@
-BASE="base base-devel linux linux-firmware man-db man-pages vim grml-zsh-config intel-ucode amd-ucode alsa-utils xf86-input-libinput"
-UTILS="pacman-contrib vim-airline vim-fugitive gstreamer mpv ttf-hack git unrar p7zip networkmanager"
-XORG="xorg xorg-drivers xorg-server xorg-xinit"
+# Base system
+MINIMAL="base linux linux-firmware"
+ESSENTIAL="man-db man-pages pacman-contrib intel-ucode amd-ucode"
+DEVELOPMENT="base-devel git"
+DISKMGM="e2fsprogs dosfstools ntfs-3g"
+CONSOLE="vim vim-airline vim-fugitive grml-zsh-config"
+MULTIMEDIA="gstreamer alsa-utils mpv"
+NETWORKING="networkmanager"
+UTILS="xdg-user-dirs unrar p7zip"
 
-GNOME="gnome gnome-tweak-tool"
-KDE="plasma kdebase kdegraphics ark smplayer"
-I3="i3 picom dmenu pulseaudio-alsa sddm xterm"
+_BASE="$MINIMAL $ESSENTIAL $DEVELOPMENT $DISKMGM $CONSOLE $MULTIMEDIA $NETWORKING $UTILS"
 
+# Bootloaders
 REFIND="refind"
 GRUB="grub os-prober"
 
+_BOOTLOADERS="$REFIND $GRUB"
+
+# Base drivers
+XORGFULL="xorg xorg-drivers"
+XORGUTILS="xorg-server xorg-xinit xf86-input-libinput"
+
+_XORG="$XORGFULL $XORGUTILS"
+
+# Video mappings
 NVIDIA="nvidia"
 AMD="xf86-video-amdgpu"
 VBOX="virtualbox-guest-utils"
 INTEL=""
 
-ALL="$BASE $UTILS $XORG $GNOME $KDE $I3 $REFIND $GRUB $NVIDIA $AMD $VBOX $INTEL"
-PACKAGES="$BASE $UTILS"
+# Desktop (GUI)
+GNOME="gnome gnome-tweak-tool"
+KDE="plasma kdebase kdegraphics ark smplayer"
+I3="i3 picom dmenu pulseaudio-alsa sddm xterm"
+
+_DESKTOPS="$GNOME $KDE $I3"
+
+# Compilations
+PACKAGES="$_BASE $XORGUTILS"
+ALL="$_BASE $_BOOTLOADERS $_XORG $_DESKTOPS"
