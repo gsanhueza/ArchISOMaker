@@ -10,18 +10,21 @@ source $PKGFILE
 
 select_desktop_environment()
 {
-    # KDE vs GNOME vs i3
+    # KDE vs GNOME vs i3 vs X11
     echo "*** Selecting ${DESKTOP_ENV}... ***"
 
-    if [ $DESKTOP_ENV == "KDE" ]
+    if [[ $DESKTOP_ENV == "KDE" ]]
     then
         export PACKAGES="$PACKAGES $KDE"
-    elif [ $DESKTOP_ENV == "GNOME" ]
+    elif [[ $DESKTOP_ENV == "GNOME" ]]
     then
         export PACKAGES="$PACKAGES $GNOME"
-    elif [ $DESKTOP_ENV == "i3" ]
+    elif [[ $DESKTOP_ENV == "i3" ]]
     then
         export PACKAGES="$PACKAGES $I3"
+    elif [[ $DESKTOP_ENV == "X11" ]]
+    then
+        export PACKAGES="$PACKAGES $X11"
     fi
 }
 
@@ -181,7 +184,7 @@ prompt_desktop_environment()
 {
     # Desktop environment
     echo "Choose your Desktop Environment (default=$DESKTOP_ENV)"
-    printf "(1) KDE    (2) GNOME    (3) i3: "
+    printf "(1) KDE    (2) GNOME    (3) i3    (4) X11: "
     read ans
     case $ans in
         '')
@@ -195,6 +198,9 @@ prompt_desktop_environment()
         ;;
         '3')
             export DESKTOP_ENV="i3"
+        ;;
+        '4')
+            export DESKTOP_ENV="X11"
         ;;
         *)
             echo "Wrong choice, halting now!"
@@ -308,6 +314,16 @@ prompt_customize()
     esac
 }
 
+prompt_failure()
+{
+    echo ""
+    echo "----------------------------------------------------"
+    echo "---                                              ---"
+    echo "---  Something wrong happened, will not reboot.  ---"
+    echo "---                                              ---"
+    echo "----------------------------------------------------"
+}
+
 install_system()
 {
     select_desktop_environment
@@ -321,15 +337,21 @@ install_system()
     copy_scripts
 
     configure_system
-    reboot_system
 }
 
-main()
+verify_installation()
 {
-    check_mounted_drive
-    prompt_customize
-    install_system
+    [[ ! -f /mnt/root/$CONFFILE && ! -f /mnt/root/$ENVFILE ]]
 }
 
 # Execute main
-main
+check_mounted_drive
+prompt_customize
+install_system
+verify_installation
+
+if [[ $? == 0 ]]; then
+    reboot_system
+else
+    prompt_failure
+fi

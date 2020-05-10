@@ -1,5 +1,6 @@
 #!/bin/bash
 
+CONFFILE="config.sh"
 ENVFILE="env.sh"
 
 source /root/$ENVFILE
@@ -41,11 +42,11 @@ enable_networking()
 enable_desktop_manager()
 {
     echo "+++ Enabling display manager... +++"
-    if [ $DESKTOP_ENV == "KDE" ]; then
+    if [[ $DESKTOP_ENV == "KDE" ]]; then
         systemctl enable sddm.service
-    elif [ $DESKTOP_ENV == "GNOME" ]; then
+    elif [[ $DESKTOP_ENV == "GNOME" ]]; then
         systemctl enable gdm.service
-    elif [ $DESKTOP_ENV == "i3" ]; then
+    elif [[ $DESKTOP_ENV == "i3" ]]; then
         systemctl enable sddm.service
     fi
 }
@@ -130,30 +131,36 @@ install_bootloader()
     fi
 }
 
+clean_up()
+{
+    rm $CONFFILE -vf
+    rm $ENVFILE -vf
+}
+
 prompt_finished()
 {
     echo ""
-    echo "+++++++++++++++++++++++++++++++++++++++++++++++"
-    echo "+++                                         +++"
-    echo "+++  Finished! Will reboot in 3 seconds...  +++"
-    echo "+++                                         +++"
-    echo "+++++++++++++++++++++++++++++++++++++++++++++++"
+    echo "+++++++++++++++++++++++++++++++++++++++++++++"
+    echo "+++                                       +++"
+    echo "+++  Setup finished! You can reboot now.  +++"
+    echo "+++                                       +++"
+    echo "+++++++++++++++++++++++++++++++++++++++++++++"
 }
 
 main()
 {
-    set_zoneinfo
-    enable_utc
-    set_language
-    set_hostname
-    enable_networking
-    enable_desktop_manager
-    make_linux_image
-    configure_root_account
-    set_user_account
-    install_bootloader
+    set_zoneinfo &&
+    enable_utc &&
+    set_language &&
+    set_hostname &&
+    enable_networking &&
+    enable_desktop_manager &&
+    make_linux_image &&
+    configure_root_account &&
+    set_user_account &&
+    install_bootloader &&
+    clean_up &&
     prompt_finished
 }
-
 # Execute main
 main

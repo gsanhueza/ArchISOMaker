@@ -32,8 +32,9 @@ INTEL=""
 GNOME="gnome gnome-tweak-tool"
 KDE="plasma kdebase kdegraphics ark smplayer"
 I3="i3 picom dmenu pulseaudio-alsa sddm xterm"
+X11="xorg-twm xorg-xclock xterm"
 
-_DESKTOPS="$GNOME $KDE $I3"
+_DESKTOPS="$GNOME $KDE $I3 $X11"
 
 # Compilations
 PACKAGES="$_BASE $XORGUTILS"
