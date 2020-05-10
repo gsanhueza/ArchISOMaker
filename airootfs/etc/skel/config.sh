@@ -1,25 +1,28 @@
 #!/bin/bash
 
-CONFFILE="config.sh"
+SCRIPTFILE=${0##*/}
+PRINTERFILE="printer.sh"
 ENVFILE="env.sh"
 
+source /root/$PRINTERFILE
 source /root/$ENVFILE
 
 set_zoneinfo()
 {
-    echo "+++ Linking zoneinfo... +++"
+    print_message ">>> Linking zoneinfo <<<"
     ln -s /usr/share/zoneinfo/$ZONEINFO /etc/localtime -f
 }
 
 enable_utc()
 {
-    echo "+++ Setting time... +++"
+    print_message ">>> Setting time <<<"
     hwclock --systohc --utc
 }
 
 set_language()
 {
-    echo "+++ Enabling language and keymap... +++"
+    print_message ">>> Enabling language and keymap <<<"
+
     sed -i "s/#\($LANGUAGE\.UTF-8\)/\1/" /etc/locale.gen
     echo "LANG=$LANGUAGE.UTF-8" > /etc/locale.conf
     echo "KEYMAP=$KEYMAP" > /etc/vconsole.conf
@@ -28,20 +31,20 @@ set_language()
 
 set_hostname()
 {
-    echo ""
-    echo "+++ Creating hostname $HOSTNAME ... +++"
+    print_message ">>> Creating hostname $HOSTNAME <<<"
     echo $HOSTNAME > /etc/hostname
 }
 
 enable_networking()
 {
-    echo "+++ Enabling networking... +++"
+    print_message ">>> Enabling networking <<<"
     systemctl enable NetworkManager.service
 }
 
 enable_desktop_manager()
 {
-    echo "+++ Enabling display manager... +++"
+    print_message ">>> Enabling display manager <<<"
+
     if [[ $DESKTOP_ENV == "KDE" ]]; then
         systemctl enable sddm.service
     elif [[ $DESKTOP_ENV == "GNOME" ]]; then
@@ -53,8 +56,7 @@ enable_desktop_manager()
 
 setup_root_account()
 {
-    echo ""
-    echo "+++ Setting root account... +++"
+    print_message ">>> Setting root account <<<"
     chsh -s /bin/zsh
 
     # This is insecure AF, don't use this if your machine is being monitored
@@ -63,18 +65,17 @@ setup_root_account()
 
 setup_user_account()
 {
-    echo ""
-    echo "+++ Creating $USERNAME account... +++"
+    print_message ">>> Creating $USERNAME account <<<"
     useradd -m -G wheel -s /bin/zsh $USERNAME
 
     # This is insecure AF, don't use this if your machine is being monitored
     echo "$USERNAME:$PASSWORD" | chpasswd
 
-    echo "+++ Enabling sudo for $USERNAME ... +++"
+    print_message ">>> Enabling sudo for $USERNAME <<<"
     sed -i 's/^#\s*\(%wheel\s\+ALL=(ALL)\s\ALL\)/\1/' /etc/sudoers
 
-    echo ""
-    echo "+++ Moving AUR Helper instalation script to user folder... +++"
+    print_message ">>> Moving AUR Helper instalation script to user folder <<<"
+
     mv /root/yay_install.sh /home/$USERNAME/ -v
     chown $USERNAME:$USERNAME /home/$USERNAME/yay_install.sh -v
 }
@@ -105,8 +106,7 @@ install_refind()
 
 install_bootloader()
 {
-    echo ""
-    echo "+++ Installing $BOOTLOADER bootloader... +++"
+    print_message ">>> Installing $BOOTLOADER bootloader <<<"
 
     if [ "$BOOTLOADER" == "grub" ]; then
         install_grub
@@ -117,8 +117,11 @@ install_bootloader()
 
 clean_up()
 {
-    rm $CONFFILE -vf
+    print_success ">>> Ready! Cleaning up <<<"
+
     rm $ENVFILE -vf
+    rm $PRINTERFILE -vf
+    rm $SCRIPTFILE -vf
 }
 
 main()
@@ -134,5 +137,6 @@ main()
     install_bootloader &&
     clean_up
 }
+
 # Execute main
 main

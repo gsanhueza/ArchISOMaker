@@ -4,17 +4,19 @@ INTERACTIVE=1
 AUTOREBOOT=1
 
 SCRIPTFILE=${0##*/}
+PRINTERFILE="printer.sh"
 PKGFILE="packages.sh"
 ENVFILE="env.sh"
 CONFFILE="config.sh"
 
+source $PRINTERFILE
 source $ENVFILE
 source $PKGFILE
 
 select_desktop_environment()
 {
     # KDE vs GNOME vs i3 vs X11
-    echo "*** Selecting ${DESKTOP_ENV}... ***"
+    print_message "Selecting ${DESKTOP_ENV}..."
 
     if [[ $DESKTOP_ENV == "KDE" ]]
     then
@@ -34,7 +36,7 @@ select_desktop_environment()
 select_bootloader()
 {
     # rEFInd vs GRUB
-    echo "*** Selecting ${BOOTLOADER}... ***"
+    print_message "Selecting ${BOOTLOADER}..."
 
     if [[ $BOOTLOADER == "refind" ]]
     then
@@ -48,7 +50,7 @@ select_bootloader()
 select_video_drivers()
 {
     # nVidia vs AMD vs VBox vs Intel
-    echo "*** Selecting ${XORG_DRIVERS} drivers... ***"
+    print_message "Selecting ${XORG_DRIVERS} drivers..."
 
     if [[ $XORG_DRIVERS == "nvidia" ]]
     then
@@ -67,7 +69,7 @@ select_video_drivers()
 
 install_packages()
 {
-    # Installing here
+    print_message "Installing packages..."
     pacstrap /mnt $PACKAGES --cachedir=/root/pkg --needed
 }
 
@@ -85,28 +87,27 @@ copy_scripts()
 {
     cp $ENVFILE /mnt/root -v
     cp $CONFFILE /mnt/root -v
+    cp $PRINTERFILE /mnt/root -v
     cp yay_install.sh /mnt/root -v
 }
 
 configure_system()
 {
-    echo ""
-    echo "*** Now configuring your system with $DESKTOP_ENV, $BOOTLOADER and $XORG_DRIVERS... ***"
+    print_message "Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $XORG_DRIVERS..."
     arch-chroot /mnt /bin/zsh -c "cd && ./$CONFFILE && rm $CONFFILE $ENVFILE -f"
 }
 
 reboot_system()
 {
     umount -R /mnt
-    echo ""
 
     for i in 0 1 2
     do
-        echo "Rebooting in $(expr 3 - $i) seconds..."
+        print_warning "Rebooting in $(expr 3 - $i) seconds..."
         sleep 1
     done
 
-    echo "Rebooting now..."
+    print_warning "Rebooting now..."
     sleep 1
     sync
     reboot
@@ -114,7 +115,7 @@ reboot_system()
 
 prompt_username()
 {
-    printf "Enter your name (default=$USERNAME): "
+    print_trailing "Enter your name (default=$USERNAME): "
     read ans
     case $ans in
         '')
@@ -128,7 +129,7 @@ prompt_username()
 
 prompt_password()
 {
-    printf "Enter your password (default=$PASSWORD): "
+    print_trailing "Enter your password (default=$PASSWORD): "
     read -s ans
     echo
     case $ans in
@@ -143,7 +144,7 @@ prompt_password()
 
 prompt_hostname()
 {
-    printf "Enter your hostname (default=${HOSTNAME}): "
+    print_trailing "Enter your hostname (default=${HOSTNAME}): "
     read ans
     case $ans in
         '')
@@ -157,7 +158,7 @@ prompt_hostname()
 
 prompt_language()
 {
-    printf "Enter your chosen language (default=$LANGUAGE): "
+    print_trailing "Enter your chosen language (default=$LANGUAGE): "
     read ans
     case $ans in
         '')
@@ -172,7 +173,7 @@ prompt_language()
 prompt_keymap()
 {
     # Keymap
-    printf "Enter your chosen keymap (default=$KEYMAP): "
+    print_trailing "Enter your chosen keymap (default=$KEYMAP): "
     read ans
     case $ans in
         '')
@@ -186,7 +187,7 @@ prompt_keymap()
 
 prompt_zoneinfo()
 {
-    printf "Enter your chosen zoneinfo (default=$ZONEINFO): "
+    print_trailing "Enter your chosen zoneinfo (default=$ZONEINFO): "
     read ans
     case $ans in
         '')
@@ -201,8 +202,8 @@ prompt_zoneinfo()
 prompt_desktop_environment()
 {
     # Desktop environment
-    echo "Choose your Desktop Environment (default=$DESKTOP_ENV)"
-    printf "(1) KDE    (2) GNOME    (3) i3    (4) X11: "
+    print_light "Choose your Desktop Environment (default=$DESKTOP_ENV)"
+    print_trailing "(1) KDE    (2) GNOME    (3) i3    (4) X11: "
     read ans
     case $ans in
         '')
@@ -221,7 +222,7 @@ prompt_desktop_environment()
             export DESKTOP_ENV="X11"
         ;;
         *)
-            echo "Wrong choice, halting now!"
+            print_failure "Wrong choice, halting now!"
             exit 1
         ;;
     esac
@@ -229,8 +230,8 @@ prompt_desktop_environment()
 
 prompt_bootloader()
 {
-    echo "Choose your Bootloader (default=$BOOTLOADER)"
-    printf "(1) rEFInd    (2) GRUB: "
+    print_light "Choose your Bootloader (default=$BOOTLOADER)"
+    print_trailing "(1) rEFInd    (2) GRUB: "
     read ans
     case $ans in
         '')
@@ -243,7 +244,7 @@ prompt_bootloader()
             export BOOTLOADER="grub"
         ;;
         *)
-            echo "Wrong choice, halting now!"
+            print_failure "Wrong choice, halting now!"
             exit 1
         ;;
     esac
@@ -251,8 +252,8 @@ prompt_bootloader()
 
 prompt_video_drivers()
 {
-    echo "Choose your Graphic Drivers (default=$XORG_DRIVERS)"
-    printf "(1) nVidia    (2) AMD    (3) VBox    (4) Intel: "
+    print_light "Choose your Graphic Drivers (default=$XORG_DRIVERS)"
+    print_trailing "(1) nVidia    (2) AMD    (3) VBox    (4) Intel: "
     read ans
     case $ans in
         '')
@@ -271,7 +272,7 @@ prompt_video_drivers()
             export XORG_DRIVERS="intel"
         ;;
         *)
-            echo "Wrong choice, halting now!"
+            print_failure "Wrong choice, halting now!"
             exit 1
         ;;
     esac
@@ -292,9 +293,7 @@ export_environment()
 }
 
 customize_env() {
-    echo "I'll now ask for data needed to install your system."
-    echo "If you leave it blank, it will just use the defaults set in '$ENVFILE'."
-    echo ""
+    print_message "This installation script will ask for some data before installing.\n"
 
     prompt_username
     prompt_password
@@ -313,32 +312,12 @@ check_mounted_drive() {
     N=$(tput sgr0)
 
     if [[ $(findmnt -M "$MOUNTPOINT") ]]; then
-        echo "Drive mounted in $MOUNTPOINT."
+        print_success "Drive mounted in $MOUNTPOINT."
     else
-        echo "Drive is ${B}NOT MOUNTED!${N}"
-        echo "Mount your drive in '$MOUNTPOINT' and re-run '$SCRIPTFILE' to install your system."
+        print_failure "Drive is NOT MOUNTED!"
+        print_warning "Mount your drive in '$MOUNTPOINT' and re-run '$SCRIPTFILE' to install your system."
         exit 1
     fi
-}
-
-prompt_message()
-{
-    B=$(tput bold)
-    N=$(tput sgr0)
-
-    echo ""
-    echo "${B}[  $1  ]${N}"
-}
-
-prompt_success()
-{
-    prompt_message "Setup finished! You can reboot now."
-}
-
-prompt_failure()
-{
-    prompt_message "Setup failed! Check errors before trying again."
-    exit 1
 }
 
 install_system()
@@ -358,7 +337,7 @@ install_system()
 
 verify_installation()
 {
-    [[ ! -f /mnt/root/$CONFFILE && ! -f /mnt/root/$ENVFILE ]]
+    [[ ! -f /mnt/root/$CONFFILE && ! -f /mnt/root/$ENVFILE && ! -f /mnt/root/$PRINTERFILE ]]
 }
 
 parse_arguments()
@@ -367,7 +346,7 @@ parse_arguments()
     do
         key=$1
         case $key in
-            -d|--default)
+            -d|--direct)
                 export INTERACTIVE=0
                 shift # past argument
             ;;
@@ -376,7 +355,7 @@ parse_arguments()
                 shift # past argument
             ;;
             *) # unknown option
-                echo "Usage: $SCRIPTFILE [-d | --default] [-k | --no-reboot]"
+                print_failure "Usage: $SCRIPTFILE [-d | --direct] [-k | --no-reboot]"
                 exit 1
             ;;
         esac
@@ -386,14 +365,14 @@ parse_arguments()
 main()
 {
     # Check pre-install state
-    check_mounted_drive
     parse_arguments $@
+    check_mounted_drive
 
     # Install as script or interactively
     if [[ $INTERACTIVE == 1 ]]; then
         customize_env
     else
-        prompt_message "Installing with defaults set in $ENVFILE..."
+        print_warning "Installing with defaults set in $ENVFILE..."
         prompt_password
     fi
 
@@ -406,9 +385,10 @@ main()
 
     # Message at end
     if [[ $? == 0 ]]; then
-        prompt_success
+        print_success "Installation finished! You can reboot now."
     else
-        prompt_failure
+        print_failure "Installation failed! Check errors before trying again."
+        exit 1
     fi
 
     # Auto-reboot
