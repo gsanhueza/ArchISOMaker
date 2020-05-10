@@ -1,4 +1,5 @@
 USERNAME="gabriel"
+PASSWORD="arch"
 HOSTNAME="linux-pc"
 LANGUAGE="es_CL"
 KEYMAP="la-latin1"

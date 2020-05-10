@@ -1,5 +1,8 @@
 #!/bin/bash
 
+INTERACTIVE=1
+AUTOREBOOT=1
+
 SCRIPTFILE=${0##*/}
 PKGFILE="packages.sh"
 ENVFILE="env.sh"
@@ -111,7 +114,7 @@ reboot_system()
 
 prompt_username()
 {
-    printf "Write your name (default=$USERNAME): "
+    printf "Enter your name (default=$USERNAME): "
     read ans
     case $ans in
         '')
@@ -123,9 +126,24 @@ prompt_username()
     esac
 }
 
+prompt_password()
+{
+    printf "Enter your password (default=$PASSWORD): "
+    read -s ans
+    echo
+    case $ans in
+        '')
+            return
+        ;;
+        *)
+            export PASSWORD=$ans
+        ;;
+    esac
+}
+
 prompt_hostname()
 {
-    printf "Write your hostname (default=${HOSTNAME}): "
+    printf "Enter your hostname (default=${HOSTNAME}): "
     read ans
     case $ans in
         '')
@@ -139,7 +157,7 @@ prompt_hostname()
 
 prompt_language()
 {
-    printf "Write your chosen language (default=$LANGUAGE): "
+    printf "Enter your chosen language (default=$LANGUAGE): "
     read ans
     case $ans in
         '')
@@ -154,7 +172,7 @@ prompt_language()
 prompt_keymap()
 {
     # Keymap
-    printf "Write your chosen keymap (default=$KEYMAP): "
+    printf "Enter your chosen keymap (default=$KEYMAP): "
     read ans
     case $ans in
         '')
@@ -168,7 +186,7 @@ prompt_keymap()
 
 prompt_zoneinfo()
 {
-    printf "Write your chosen zoneinfo (default=$ZONEINFO): "
+    printf "Enter your chosen zoneinfo (default=$ZONEINFO): "
     read ans
     case $ans in
         '')
@@ -263,6 +281,7 @@ export_environment()
 {
     # First 'echo' uses a single ">" because we want to re-write the file
     echo "USERNAME=$USERNAME" > $ENVFILE
+    echo "PASSWORD=$PASSWORD" >> $ENVFILE
     echo "HOSTNAME=$HOSTNAME" >> $ENVFILE
     echo "LANGUAGE=$LANGUAGE" >> $ENVFILE
     echo "KEYMAP=$KEYMAP" >> $ENVFILE
@@ -278,6 +297,7 @@ customize_env() {
     echo ""
 
     prompt_username
+    prompt_password
     prompt_hostname
     prompt_language
     prompt_keymap
@@ -285,8 +305,6 @@ customize_env() {
     prompt_desktop_environment
     prompt_bootloader
     prompt_video_drivers
-
-    export_environment
 }
 
 check_mounted_drive() {
@@ -303,25 +321,24 @@ check_mounted_drive() {
     fi
 }
 
-prompt_customize()
+prompt_message()
 {
-    printf "Do you want to use defaults? (See $ENVFILE) (Y/n): "
-    read defaults
-    case $defaults in
-        'n'|'N')
-            customize_env
-        ;;
-    esac
+    B=$(tput bold)
+    N=$(tput sgr0)
+
+    echo ""
+    echo "${B}[  $1  ]${N}"
+}
+
+prompt_success()
+{
+    prompt_message "Setup finished! You can reboot now."
 }
 
 prompt_failure()
 {
-    echo ""
-    echo "----------------------------------------------------"
-    echo "---                                              ---"
-    echo "---  Something wrong happened, will not reboot.  ---"
-    echo "---                                              ---"
-    echo "----------------------------------------------------"
+    prompt_message "Setup failed! Check errors before trying again."
+    exit 1
 }
 
 install_system()
@@ -344,14 +361,61 @@ verify_installation()
     [[ ! -f /mnt/root/$CONFFILE && ! -f /mnt/root/$ENVFILE ]]
 }
 
-# Execute main
-check_mounted_drive
-prompt_customize
-install_system
-verify_installation
+parse_arguments()
+{
+    while [[ $# -gt 0 ]]
+    do
+        key=$1
+        case $key in
+            -d|--default)
+                export INTERACTIVE=0
+                shift # past argument
+            ;;
+            -k|--no-reboot)
+                export AUTOREBOOT=0
+                shift # past argument
+            ;;
+            *) # unknown option
+                echo "Usage: $SCRIPTFILE [-d | --default] [-k | --no-reboot]"
+                exit 1
+            ;;
+        esac
+    done
+}
 
-if [[ $? == 0 ]]; then
-    reboot_system
-else
-    prompt_failure
-fi
+main()
+{
+    # Check pre-install state
+    check_mounted_drive
+    parse_arguments $@
+
+    # Install as script or interactively
+    if [[ $INTERACTIVE == 1 ]]; then
+        customize_env
+    else
+        prompt_message "Installing with defaults set in $ENVFILE..."
+        prompt_password
+    fi
+
+    # Save data entered by the user
+    export_environment
+
+    # Install and verify
+    install_system
+    verify_installation
+
+    # Message at end
+    if [[ $? == 0 ]]; then
+        prompt_success
+    else
+        prompt_failure
+    fi
+
+    # Auto-reboot
+    if [[ $AUTOREBOOT == 1 ]]; then
+        reboot_system
+    fi
+}
+
+# Execute main
+main $@

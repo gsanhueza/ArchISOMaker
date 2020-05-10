@@ -25,7 +25,7 @@ _XORG="$XORGFULL $XORGUTILS"
 # Video mappings
 NVIDIA="nvidia"
 AMD="xf86-video-amdgpu"
-VBOX="virtualbox-guest-utils"
+VBOX="xf86-video-vmware virtualbox-guest-utils"
 INTEL=""
 
 # Desktop (GUI)

@@ -51,41 +51,25 @@ enable_desktop_manager()
     fi
 }
 
-make_linux_image()
-{
-    echo ""
-    echo "+++ Creating linux image... +++"
-    mkinitcpio -p linux
-}
-
-configure_root_account()
+setup_root_account()
 {
     echo ""
     echo "+++ Setting root account... +++"
     chsh -s /bin/zsh
-    passwd
 
-    while (( $? != 0 )); do
-        echo ""
-        echo "Try again!"
-        passwd
-    done
+    # This is insecure AF, don't use this if your machine is being monitored
+    echo "root:$PASSWORD" | chpasswd
 }
 
-set_user_account()
+setup_user_account()
 {
     echo ""
     echo "+++ Creating $USERNAME account... +++"
     useradd -m -G wheel -s /bin/zsh $USERNAME
-    passwd $USERNAME
 
-    while (( $? != 0 )); do
-        echo ""
-        echo "Try again!"
-        passwd $USERNAME
-    done
+    # This is insecure AF, don't use this if your machine is being monitored
+    echo "$USERNAME:$PASSWORD" | chpasswd
 
-    echo ""
     echo "+++ Enabling sudo for $USERNAME ... +++"
     sed -i 's/^#\s*\(%wheel\s\+ALL=(ALL)\s\ALL\)/\1/' /etc/sudoers
 
@@ -137,16 +121,6 @@ clean_up()
     rm $ENVFILE -vf
 }
 
-prompt_finished()
-{
-    echo ""
-    echo "+++++++++++++++++++++++++++++++++++++++++++++"
-    echo "+++                                       +++"
-    echo "+++  Setup finished! You can reboot now.  +++"
-    echo "+++                                       +++"
-    echo "+++++++++++++++++++++++++++++++++++++++++++++"
-}
-
 main()
 {
     set_zoneinfo &&
@@ -155,12 +129,10 @@ main()
     set_hostname &&
     enable_networking &&
     enable_desktop_manager &&
-    make_linux_image &&
-    configure_root_account &&
-    set_user_account &&
+    setup_root_account &&
+    setup_user_account &&
     install_bootloader &&
-    clean_up &&
-    prompt_finished
+    clean_up
 }
 # Execute main
 main
