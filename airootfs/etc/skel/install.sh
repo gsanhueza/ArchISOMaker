@@ -93,7 +93,7 @@ copy_scripts()
 
 configure_system()
 {
-    print_message "Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $XORG_DRIVERS..."
+    print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $XORG_DRIVERS... <<<"
     arch-chroot /mnt /bin/zsh -c "cd && ./$CONFFILE && rm $CONFFILE $ENVFILE -f"
 }
 
