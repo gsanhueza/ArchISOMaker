@@ -11,6 +11,8 @@ usermod -s /usr/bin/zsh root
 cp -aT /etc/skel/ /root/
 mv /root/pacman_on_iso.conf /etc/pacman.conf
 chmod 700 /root
+# unset the root password
+passwd -d root
 
 sed -i 's/#\(PermitRootLogin \).\+/\1yes/' /etc/ssh/sshd_config
 sed -i "s/#Server/Server/g" /etc/pacman.d/mirrorlist
@@ -20,5 +22,5 @@ sed -i 's/#\(HandleSuspendKey=\)suspend/\1ignore/' /etc/systemd/logind.conf
 sed -i 's/#\(HandleHibernateKey=\)hibernate/\1ignore/' /etc/systemd/logind.conf
 sed -i 's/#\(HandleLidSwitch=\)suspend/\1ignore/' /etc/systemd/logind.conf
 
-systemctl enable pacman-init.service choose-mirror.service
+systemctl enable pacman-init.service choose-mirror.service systemd-networkd.service systemd-resolved.service
 systemctl set-default multi-user.target
