@@ -89,7 +89,7 @@ install_grub()
 install_refind()
 {
     # Bait refind-install into thinking that a refind install already exists,
-    # so it will "upgrade" (install) in default location /boot/EFI/refind
+    # so it will "upgrade" (install) in desired location /boot/EFI/refind
     # This is done to avoid moving Microsoft's original bootloader.
 
     # Comment the following two lines if you have an HP computer
@@ -100,8 +100,9 @@ install_refind()
 
     refind-install
     REFIND_UUID=$(cat /etc/fstab | grep UUID | grep "/ " | cut --fields=1)
-    echo "\"Boot with standard options\"        \"root=${REFIND_UUID} rw initrd=/intel-ucode.img initrd=/amd-ucode.img initrd=/initramfs-linux.img\"" > /boot/refind_linux.conf
-    echo "\"Boot with ASUS options\"        \"root=${REFIND_UUID} rw initrd=/intel-ucode.img initrd=/amd-ucode.img initrd=/initramfs-linux.img acpi_osi= acpi_backlight=native\"" >> /boot/refind_linux.conf
+    echo "\"Boot using default options\"     \"root=${REFIND_UUID} rw add_efi_memmap initrd=intel-ucode.img initrd=amd-ucode.img initrd=initramfs-linux.img" > /boot/refind_linux.conf
+    echo "\"Boot using fallback initramfs\"  \"root=${REFIND_UUID} rw add_efi_memmap initrd=intel-ucode.img initrd=amd-ucode.img initrd=initramfs-linux-fallback.img" >> /boot/refind_linux.conf
+    echo "\"Boot to terminal\"               \"root=${REFIND_UUID} rw add_efi_memmap initrd=intel-ucode.img initrd=amd-ucode.img initrd=initramfs-linux.img systemd.unit=multi-user.target" >> /boot/refind_linux.conf
 }
 
 install_bootloader()
