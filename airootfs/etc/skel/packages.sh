@@ -30,7 +30,7 @@ INTEL=""
 
 # Desktop (GUI)
 GNOME="gnome gnome-tweak-tool"
-KDE="plasma kdebase kdegraphics ark smplayer"
+KDE="plasma konsole dolphin kate gwenview kolourpaint okular spectacle ark smplayer"
 I3="i3 picom dmenu pulseaudio-alsa sddm xterm"
 X11="xorg-twm xorg-xclock xterm"
 
