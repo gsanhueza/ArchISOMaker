@@ -1,3 +1,6 @@
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 [Unit]
 Description=pacman mirrorlist update
 Wants=network-online.target
@@ -6,7 +9,7 @@ ConditionKernelCommandLine=!mirror
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/reflector --protocol https --age 1 --sort rate --save /etc/pacman.d/mirrorlist
+ExecStart=/usr/bin/reflector --protocol https --latest 70 --sort rate --save /etc/pacman.d/mirrorlist
 Restart=on-failure
 RestartSec=10
 CacheDirectory=reflector
@@ -27,7 +30,6 @@ ProtectKernelLogs=true
 ProtectKernelModules=true
 ProtectSystem=strict
 ReadWritePaths=/etc/pacman.d/mirrorlist
-ReadOnlyPaths=/etc/reflector/reflector.conf
 RemoveIPC=true
 RestrictAddressFamilies=~AF_AX25 AF_IPX AF_APPLETALK AF_X25 AF_DECnet AF_KEY AF_NETLINK AF_PACKET AF_RDS AF_PPPOX AF_LLC AF_IB AF_MPLS AF_CAN AF_TIPC AF_BLUETOOTH AF_ALG AF_VSOCK AF_KCM AF_UNIX AF_XDP
 RestrictNamespaces=true
