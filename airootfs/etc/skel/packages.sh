@@ -28,6 +28,8 @@ AMD="xf86-video-amdgpu"
 VBOX="xf86-video-vmware virtualbox-guest-utils"
 INTEL=""
 
+_VIDEO="$NVIDIA $AMD $VBOX $INTEL"
+
 # Desktop (GUI)
 GNOME="gnome gnome-tweak-tool"
 KDE="plasma konsole dolphin kate gwenview kolourpaint okular spectacle ark smplayer"
@@ -38,4 +40,4 @@ _DESKTOPS="$GNOME $KDE $I3 $X11"
 
 # Compilations
 PACKAGES="$_BASE $XORGUTILS"
-ALL="$_BASE $_BOOTLOADERS $_XORG $_DESKTOPS"
+ALL="$_BASE $_BOOTLOADERS $_XORG $_VIDEO $_DESKTOPS"
