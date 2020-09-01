@@ -1,11 +1,13 @@
 #!/bin/bash
 
 script_path=$(readlink -f ${0%/*})
-source "$script_path/airootfs/etc/skel/packages.sh"
+source "${script_path}/airootfs/etc/skel/packages.sh"
 
 # Custom variables
-NEWROOTLOC="$script_path/TEMPMNT"
-PKGDBLOC="$script_path/airootfs/etc/skel/pkg"
+work_dir="work"
+out_dir="out"
+temp_mnt="${script_path}/TEMPMNT"
+custom_pkg_dir="${script_path}/airootfs/etc/skel/pkg"
 UPDATECACHE=1
 
 # Helper function to run make_*() only one time per architecture.
@@ -18,36 +20,42 @@ run_once() {
 
 # Create needed folders for make_local_repo
 make_folder() {
+    echo "Creating temporal root folder..."
+
     # Make root directory
-    if [[ ! -e $NEWROOTLOC ]]; then
-        mkdir -p $NEWROOTLOC
-        echo "Creating temporal install root at ${NEWROOTLOC}"
-        mkdir -m 0755 -p "$NEWROOTLOC"/var/{cache/pacman/pkg,lib/pacman,log} $NEWROOTLOC/{dev,run,etc}
-        mkdir -m 1777 -p "$NEWROOTLOC"/tmp
-        mkdir -m 0555 -p "$NEWROOTLOC"/{sys,proc}
+    if [[ ! -e ${temp_mnt} ]]; then
+        mkdir -p ${temp_mnt}
+        echo "Creating temporal install root at ${temp_mnt}"
+        mkdir -m 0755 -p "${temp_mnt}"/var/{cache/pacman/pkg,lib/pacman,log} ${temp_mnt}/{dev,run,etc}
+        mkdir -m 1777 -p "${temp_mnt}"/tmp
+        mkdir -m 0555 -p "${temp_mnt}"/{sys,proc}
     fi
 
     # Make repo folder
-    if [[ ! -e $PKGDBLOC ]]; then
-        mkdir -p $PKGDBLOC
+    if [[ ! -e ${custom_pkg_dir} ]]; then
+        mkdir -p ${custom_pkg_dir}
     fi
 }
 
 # Pull packages from Internet
 # See packages.sh
 make_download() {
-    pacman -Syw --root $NEWROOTLOC --cachedir $PKGDBLOC --noconfirm $ALL
+    echo "Downloading packages..."
+
+    pacman -Syw --root ${temp_mnt} --cachedir ${custom_pkg_dir} --noconfirm $ALL
 }
 
 # Create Pacman DB
 make_database() {
+    echo "Creating package database..."
+
     n=0
 
     # If the command didn't run correctly, re-run. It solves the file-not-found error. Go figure.
     # We'll re-run the command up to 5 times.
     until [ $n -ge 5 ]
     do
-        repo-add -R -n $PKGDBLOC/custom.db.tar.gz $PKGDBLOC/*pkg.tar* && break  # If commmand ran ok, don't re-run
+        repo-add -R -n ${custom_pkg_dir}/custom.db.tar.gz ${custom_pkg_dir}/*pkg.tar* && break  # If commmand ran ok, don't re-run
         n=$[$n+1]
         sleep 1
     done
@@ -55,6 +63,8 @@ make_database() {
 
 # Make local pkg database and repo only if needed
 make_local_repo() {
+    echo "Creating local repo..."
+
     run_once make_folder
 
     if (( UPDATECACHE )); then
@@ -67,12 +77,14 @@ make_local_repo() {
     echo "Local repo is ready!"
 }
 
-# Clean-up
-clean_up() {
+# Cleaning duties
+wrap_up() {
+    echo "Wrapping up..."
+
     OWNER=${SUDO_USER:-$USER}
 
-    rm work/ -rf
-    rm $NEWROOTLOC -rf
-    chown $OWNER out/* -v
-    mv out/* ..
+    rm ${work_dir} -rf
+    rm ${temp_mnt} -rf
+    chown $OWNER ${out_dir}/*.iso -v
+    mv ${out_dir}/* .. -v
 }
