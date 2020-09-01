@@ -1,13 +1,13 @@
 #!/bin/bash
 
 script_path=$(readlink -f ${0%/*})
-source "${script_path}/airootfs/etc/skel/packages.sh"
+source "${script_path}/airootfs/root/packages.sh"
 
 # Custom variables
 work_dir="work"
 out_dir="out"
 temp_mnt="${script_path}/TEMPMNT"
-custom_pkg_dir="${script_path}/airootfs/etc/skel/pkg"
+custom_pkg_dir="${script_path}/airootfs/root/pkg"
 UPDATECACHE=1
 
 # Helper function to run make_*() only one time per architecture.

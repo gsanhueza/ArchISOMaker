@@ -70,7 +70,7 @@ select_video_drivers()
 install_packages()
 {
     print_message "Installing packages..."
-    pacstrap /mnt $PACKAGES --cachedir=/root/pkg --needed
+    pacstrap -C /root/pacman_on_iso.conf /mnt $PACKAGES --cachedir=/root/pkg --needed
 }
 
 generate_fstab()
