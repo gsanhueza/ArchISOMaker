@@ -25,8 +25,8 @@ wiki instructions.
 
 You need to have `archiso` installed in your system to use this script, and a
 working internet connection to pull the packages that we'll embed into the ISO.
-The embedded packages are specified in `airootfs/etc/skel/packages.sh`, will be
-downloaded in `airootfs/etc/skel/pkg`, and will be automatically updated when
+The embedded packages are specified in `airootfs/root/packages.sh`, will be
+downloaded in `airootfs/root/pkg`, and will be automatically updated when
 you run `build.sh` (the ISO-building script).
 
 If you don't want to auto-update the packages when running the script,

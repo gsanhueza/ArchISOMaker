@@ -43,6 +43,8 @@ iwd
 jfsutils
 kitty-terminfo
 lftp
+libfido2
+libusb-compat
 linux
 linux-atm
 linux-firmware
@@ -74,6 +76,7 @@ openvpn
 partclone
 parted
 partimage
+pcsclite
 ppp
 pptpclient
 reflector
@@ -83,7 +86,6 @@ rsync
 rxvt-unicode-terminfo
 sdparm
 sg3_utils
-sl
 smartmontools
 sof-firmware
 squashfs-tools
@@ -95,6 +97,7 @@ terminus-font
 termite-terminfo
 testdisk
 tmux
+tpm2-tss
 udftools
 usb_modeswitch
 usbmuxd
