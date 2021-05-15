@@ -51,22 +51,14 @@ script (`install.sh`).
 
 ### Relevant information
 
-The installation script (`install.sh`) asks for your data by default, and auto-reboots
-when the installation has been successful.
-To change this behavior, use the arguments `-d` and/or `-k`:
-
-- `./install.sh -d`: Minimizes user interaction with the script by only asking for
-a password to the installed system, and uses the remaining information
-from `env.sh` as default. **Only use this argument after manually editing `env.sh`**.
-- `./install.sh -k`: Keeps the live system on, avoiding the auto-reboot step.
-Useful if you want to do post-install tasks before rebooting into your newly-installed system.
+The installation script (`install.sh`) uses settings from the `env.sh` file,
+so you are required to edit it *before* installing the system!
 
 ### Script descriptions
 
 Each script file plays a particular role:
 
-- `install.sh`: The main installation script. By default, it will ask you for information needed
-to install Arch Linux.
+- `install.sh`: The main installation script.
 - `env.sh`: The environment script that stores the installation/setup information.
 - `config.sh`: A configuration script that inside *chroot*, after installing the
 packages. It uses the information stored in `env.sh`.

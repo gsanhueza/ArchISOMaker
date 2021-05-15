@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INTERACTIVE=1
+MOUNTPOINT="/mnt"
 
 SCRIPTFILE=${0##*/}
 PRINTERFILE="printer.sh"
@@ -99,29 +99,32 @@ configure_system()
 prompt_environment()
 {
     print_message "Your system will be installed using the data in '$ENVFILE'"
-    print_warning "Make sure your data is correct in $ENVFILE before proceeding!"
+    print_warning "Make sure your data is correct before proceeding!"
     echo ""
 
-    print_trailing "Do you want to install now? (y/N): "
+    print_trailing "Do you wish to edit '$ENVFILE'? ((Y)es / (n)o / e(x)it: "
     read ans
 
     case $ans in
-        'y'|'Y')
-            print_success "Installation started."
+        'n'|'N')
+            print_success "Ok, installing with settings retrieved from '$ENVFILE'..."
+            sleep 1
+        ;;
+        'x'|'X')
+            print_failure "Aborting installation!"
+            exit 1
         ;;
         *)
-            print_failure "Installation stopped."
-            print_warning "Edit $ENVFILE and run this script again."
-            exit 1
+            vim env.sh
+            print_message "--------------------------------------------"
+            print_message "Press ENTER to continue, or Ctrl+C to abort."
+            print_message "--------------------------------------------"
+            read
         ;;
     esac
 }
 
 check_mounted_drive() {
-    MOUNTPOINT="/mnt"
-    B=$(tput bold)
-    N=$(tput sgr0)
-
     if [[ $(findmnt -M "$MOUNTPOINT") ]]; then
         print_success "Drive mounted in $MOUNTPOINT."
     else
