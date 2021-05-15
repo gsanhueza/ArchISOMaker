@@ -21,6 +21,7 @@ file_permissions=(
   ["/usr/local/bin/Installation_guide"]="0:0:755"
   ["/usr/local/bin/livecd-sound"]="0:0:755"
   ["/root/config.sh"]="0:0:755"
+  ["/root/expand_cowsize.sh"]="0:0:755"
   ["/root/install.sh"]="0:0:755"
   ["/root/yay_install.sh"]="0:0:755"
 )
