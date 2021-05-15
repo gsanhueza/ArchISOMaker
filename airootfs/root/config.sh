@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 SCRIPTFILE=${0##*/}
 PRINTERFILE="printer.sh"

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # This script will expand the available space in the live ISO,
 # in case you absolutely need to install something heavier than 256 MB,
 # like a web browser (for emergency use).
