@@ -1,7 +1,6 @@
 #!/bin/bash
 
 INTERACTIVE=1
-AUTOREBOOT=1
 
 SCRIPTFILE=${0##*/}
 PRINTERFILE="printer.sh"
@@ -95,22 +94,6 @@ configure_system()
 {
     print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $XORG_DRIVERS... <<<"
     arch-chroot /mnt /bin/zsh -c "cd && ./$CONFFILE && rm $CONFFILE $ENVFILE -f"
-}
-
-reboot_system()
-{
-    umount -R /mnt
-
-    for i in 0 1 2
-    do
-        print_warning "Rebooting in $(expr 3 - $i) seconds..."
-        sleep 1
-    done
-
-    print_warning "Rebooting now..."
-    sleep 1
-    sync
-    reboot
 }
 
 prompt_username()
@@ -389,11 +372,6 @@ main()
     else
         print_failure "Installation failed! Check errors before trying again."
         exit 1
-    fi
-
-    # Auto-reboot
-    if [[ $AUTOREBOOT == 1 ]]; then
-        reboot_system
     fi
 }
 
