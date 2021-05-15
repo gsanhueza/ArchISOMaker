@@ -32,6 +32,16 @@ you run `build.sh` (the ISO-building script).
 If you don't want to auto-update the packages when running the script,
 edit `customtools.sh` and change the *UPDATECACHE* variable to 0.
 
+## Testing your ISO
+
+The generated ISO comes with virtualbox drivers, so you can setup a VirtualBox
+machine and run your ISO there.
+
+Alternatively, `archiso` provides with a convenient method that uses QEMU:
+
+- `run_archiso -i path/to/an/arch.iso` to run as BIOS
+- `run_archiso -u -i path/to/an/arch.iso` to run as UEFI
+
 ## Installing your system
 
 Burn the generated ISO to a DVD or an USB stick.
