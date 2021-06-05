@@ -55,7 +55,7 @@ make_database() {
     # We'll re-run the command up to 5 times.
     until [ $n -ge 5 ]
     do
-        repo-add -R -n ${custom_pkg_dir}/custom.db.tar.gz ${custom_pkg_dir}/*pkg.tar* && break  # If commmand ran ok, don't re-run
+        repo-add -R -n ${custom_pkg_dir}/custom.db.tar.gz ${custom_pkg_dir}/*pkg.tar.{xz,zst} && break  # If command ran ok, don't re-run
         n=$[$n+1]
         sleep 1
     done
