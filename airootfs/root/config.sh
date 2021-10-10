@@ -38,7 +38,13 @@ set_hostname()
 enable_networking()
 {
     print_message ">>> Enabling networking <<<"
-    systemctl enable NetworkManager.service
+
+    if [[ $(pacman -Qsq networkmanager) ]]; then
+        systemctl enable NetworkManager.service
+    else
+        systemctl enable systemd-networkd.service
+        systemctl enable systemd-resolved.service
+    fi
 }
 
 enable_desktop_manager()
