@@ -57,7 +57,7 @@ enable_desktop_manager()
 setup_root_account()
 {
     print_message ">>> Setting root account <<<"
-    chsh -s /bin/zsh
+    chsh -s $USERSHELL
 
     # This is insecure AF, don't use this if your machine is being monitored
     echo "root:$PASSWORD" | chpasswd
@@ -66,7 +66,7 @@ setup_root_account()
 setup_user_account()
 {
     print_message ">>> Creating $USERNAME account <<<"
-    useradd -m -G wheel -s /bin/zsh $USERNAME
+    useradd -m -G wheel -s $USERSHELL $USERNAME
 
     # This is insecure AF, don't use this if your machine is being monitored
     echo "$USERNAME:$PASSWORD" | chpasswd
@@ -141,3 +141,4 @@ main()
 
 # Execute main
 main
+
