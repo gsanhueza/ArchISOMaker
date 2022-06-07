@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Execute true script
-cd /root/scripts
+cd scripts/
 ./archinstall.sh
-cd
+cd ..
 
