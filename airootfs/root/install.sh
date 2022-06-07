@@ -13,7 +13,7 @@ ENVFILE="env.sh"
 CONFFILE="config.sh"
 
 YAYFILE="yay_install.sh"
-PACMANFILE="pacman_on_iso.conf"
+PACMANFILE="pacman_custom.conf"
 
 # --------------------------------------- #
 
@@ -23,8 +23,8 @@ ENVPATH="${BASEDIR}/${ENVFILE}"
 CONFPATH="${BASEDIR}/${CONFFILE}"
 
 YAYPATH="${BASEDIR}/${YAYFILE}"
-PACMANPATH="${BASEDIR}/${PACMANFILE}"
 PKGDIRPATH="${BASEDIR}/pkg"
+PACMANPATH="/etc/${PACMANFILE}"
 
 # --------------------------------------- #
 
