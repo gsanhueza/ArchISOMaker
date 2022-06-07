@@ -69,31 +69,31 @@ select_video_drivers()
 install_packages()
 {
     print_message "Installing packages..."
-    pacstrap -C /root/pacman_on_iso.conf /mnt $PACKAGES --cachedir=/root/pkg --needed
+    pacstrap -C /root/pacman_on_iso.conf $MOUNTPOINT $PACKAGES --cachedir=/root/pkg --needed
 }
 
 generate_fstab()
 {
-    genfstab -p -U /mnt > /mnt/etc/fstab
+    genfstab -p -U $MOUNTPOINT > $MOUNTPOINT/etc/fstab
 }
 
 copy_mirrorlist()
 {
-    cp mirrorlist /mnt/etc/pacman.d/mirrorlist -v
+    cp mirrorlist $MOUNTPOINT/etc/pacman.d/mirrorlist -v
 }
 
 copy_scripts()
 {
-    cp $ENVFILE /mnt/root -v
-    cp $CONFFILE /mnt/root -v
-    cp $PRINTERFILE /mnt/root -v
-    cp yay_install.sh /mnt/root -v
+    cp $ENVFILE $MOUNTPOINT/root -v
+    cp $CONFFILE $MOUNTPOINT/root -v
+    cp $PRINTERFILE $MOUNTPOINT/root -v
+    cp yay_install.sh $MOUNTPOINT/root -v
 }
 
 configure_system()
 {
     print_warning ">>> Configuring your system with $DESKTOP_ENV, $BOOTLOADER and $XORG_DRIVERS... <<<"
-    arch-chroot /mnt /bin/zsh -c "cd && ./$CONFFILE && rm $CONFFILE $ENVFILE -f"
+    arch-chroot $MOUNTPOINT /bin/zsh -c "cd && ./$CONFFILE && rm $CONFFILE $ENVFILE -f"
 }
 
 prompt_environment()
@@ -151,7 +151,7 @@ install_system()
 
 verify_installation()
 {
-    [[ ! -f /mnt/root/$CONFFILE && ! -f /mnt/root/$ENVFILE && ! -f /mnt/root/$PRINTERFILE ]]
+    [[ ! -f $MOUNTPOINT/root/$CONFFILE && ! -f $MOUNTPOINT/root/$ENVFILE && ! -f $MOUNTPOINT/root/$PRINTERFILE ]]
 }
 
 main()
