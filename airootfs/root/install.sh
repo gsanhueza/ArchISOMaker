@@ -1,16 +1,36 @@
 #!/usr/bin/env bash
 
-MOUNTPOINT="/mnt"
-
+# FIXED LOCATIONS
 SCRIPTFILE=${0##*/}
+MOUNTPOINT="/mnt"
+BASEDIR="/root"
+
+# --------------------------------------- #
+
 PRINTERFILE="printer.sh"
 PKGFILE="packages.sh"
 ENVFILE="env.sh"
 CONFFILE="config.sh"
 
-source $PRINTERFILE
-source $ENVFILE
-source $PKGFILE
+YAYFILE="yay_install.sh"
+PACMANFILE="pacman_on_iso.conf"
+
+# --------------------------------------- #
+
+PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
+PKGPATH="${BASEDIR}/${PKGFILE}"
+ENVPATH="${BASEDIR}/${ENVFILE}"
+CONFPATH="${BASEDIR}/${CONFFILE}"
+
+YAYPATH="${BASEDIR}/${YAYFILE}"
+PACMANPATH="${BASEDIR}/${PACMANFILE}"
+PKGDIRPATH="${BASEDIR}/pkg"
+
+# --------------------------------------- #
+
+source $PRINTERPATH
+source $ENVPATH
+source $PKGPATH
 
 select_desktop_environment()
 {
@@ -69,7 +89,7 @@ select_video_drivers()
 install_packages()
 {
     print_message "Installing packages..."
-    pacstrap -C /root/pacman_on_iso.conf $MOUNTPOINT $PACKAGES --cachedir=/root/pkg --needed
+    pacstrap -C $PACMANPATH $MOUNTPOINT $PACKAGES --cachedir=$PKGDIRPATH --needed
 }
 
 generate_fstab()
@@ -79,15 +99,15 @@ generate_fstab()
 
 copy_mirrorlist()
 {
-    cp mirrorlist $MOUNTPOINT/etc/pacman.d/mirrorlist -v
+    cp ${BASEDIR}/mirrorlist $MOUNTPOINT/etc/pacman.d/mirrorlist -v
 }
 
 copy_scripts()
 {
-    cp $ENVFILE $MOUNTPOINT/root -v
-    cp $CONFFILE $MOUNTPOINT/root -v
-    cp $PRINTERFILE $MOUNTPOINT/root -v
-    cp yay_install.sh $MOUNTPOINT/root -v
+    cp $ENVPATH $MOUNTPOINT/root -v
+    cp $CONFPATH $MOUNTPOINT/root -v
+    cp $PRINTERPATH $MOUNTPOINT/root -v
+    cp $YAYPATH $MOUNTPOINT/root -v
 }
 
 configure_system()
@@ -98,16 +118,16 @@ configure_system()
 
 prompt_environment()
 {
-    print_message "Your system will be installed using the data in '$ENVFILE'"
+    print_message "Your system will be installed using the data in '$ENVPATH'"
     print_warning "Make sure your data is correct before proceeding!"
     echo ""
 
-    print_trailing "Do you wish to edit '$ENVFILE'? ((Y)es / (n)o / e(x)it: "
+    print_trailing "Do you wish to edit '$ENVPATH'? ((Y)es / (n)o / e(x)it: "
     read ans
 
     case $ans in
         'n'|'N')
-            print_success "Ok, installing with settings retrieved from '$ENVFILE'..."
+            print_success "Ok, installing with settings retrieved from '$ENVPATH'..."
             sleep 1
         ;;
         'x'|'X')
@@ -115,7 +135,7 @@ prompt_environment()
             exit 1
         ;;
         *)
-            vim env.sh
+            vim $ENVPATH
             print_message "--------------------------------------------"
             print_message "Press ENTER to continue, or Ctrl+C to abort."
             print_message "--------------------------------------------"
