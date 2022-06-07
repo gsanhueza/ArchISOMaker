@@ -134,7 +134,9 @@ prompt_environment()
             print_message "--------------------------------------------"
             print_message "Press ENTER to continue, or Ctrl+C to abort."
             print_message "--------------------------------------------"
+
             read
+            source $ENVPATH
         ;;
     esac
 }
