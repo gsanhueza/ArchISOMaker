@@ -1,7 +1,7 @@
 #!/bin/bash
 
 script_path=$(readlink -f ${0%/*})
-source "${script_path}/airootfs/root/packages.sh"
+source "${script_path}/airootfs/root/scripts/packages.sh"
 
 # Custom variables
 work_dir="work"
