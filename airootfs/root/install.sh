@@ -1,30 +1,30 @@
 #!/usr/bin/env bash
 
-# FIXED LOCATIONS
 SCRIPTFILE=${0##*/}
 MOUNTPOINT="/mnt"
 BASEDIR="/root"
-
-# --------------------------------------- #
 
 PRINTERFILE="printer.sh"
 PKGFILE="packages.sh"
 ENVFILE="env.sh"
 CONFFILE="config.sh"
-
 YAYFILE="yay_install.sh"
-PACMANFILE="pacman_custom.conf"
-
-# --------------------------------------- #
 
 PRINTERPATH="${BASEDIR}/${PRINTERFILE}"
 PKGPATH="${BASEDIR}/${PKGFILE}"
 ENVPATH="${BASEDIR}/${ENVFILE}"
 CONFPATH="${BASEDIR}/${CONFFILE}"
-
 YAYPATH="${BASEDIR}/${YAYFILE}"
-PKGDIRPATH="${BASEDIR}/pkg"
-PACMANPATH="/etc/${PACMANFILE}"
+
+# --------------------------------------- #
+
+# Use this for OFFLINE installation
+CACHEDIR="/root/pkg"
+PACMANPATH="/etc/pacman_custom.conf"
+
+# Use this if for ONLINE installation
+#CACHEDIR="${MOUNTPOINT}/var/cache/pacman/pkg"
+#PACMANPATH="/etc/pacman.conf"
 
 # --------------------------------------- #
 
@@ -89,17 +89,12 @@ select_video_drivers()
 install_packages()
 {
     print_message "Installing packages..."
-    pacstrap -C $PACMANPATH $MOUNTPOINT $PACKAGES --cachedir=$PKGDIRPATH --needed
+    pacstrap -C $PACMANPATH $MOUNTPOINT $PACKAGES --cachedir=$CACHEDIR --needed
 }
 
 generate_fstab()
 {
     genfstab -p -U $MOUNTPOINT > $MOUNTPOINT/etc/fstab
-}
-
-copy_mirrorlist()
-{
-    cp ${BASEDIR}/mirrorlist $MOUNTPOINT/etc/pacman.d/mirrorlist -v
 }
 
 copy_scripts()
@@ -162,8 +157,6 @@ install_system()
 
     install_packages
     generate_fstab
-
-    copy_mirrorlist
     copy_scripts
 
     configure_system
