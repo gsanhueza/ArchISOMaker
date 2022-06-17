@@ -1,0 +1,3 @@
+[submodule "airootfs/root/ArchScripts"]
+	path = airootfs/root/ArchScripts
+	url = https://github.com/gsanhueza/ArchScripts.git
