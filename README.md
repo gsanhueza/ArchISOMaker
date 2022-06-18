@@ -17,7 +17,8 @@ A custom Arch Linux ISO Maker (Just a bunch of scripts).
 
 ### Updating this repository (and the submodule)
 
-* Run `git pull --recurse-submodules`
+* Run `git pull`
+* Run `git submodule update --remote --recursive`
 
 ## Introduction
 
