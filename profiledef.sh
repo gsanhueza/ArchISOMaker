@@ -23,8 +23,8 @@ file_permissions=(
   ["/usr/local/bin/Installation_guide"]="0:0:755"
   ["/usr/local/bin/livecd-sound"]="0:0:755"
   ["/root/install.sh"]="0:0:755"
-  ["/root/scripts/config.sh"]="0:0:755"
-  ["/root/scripts/expand_cowsize.sh"]="0:0:755"
-  ["/root/scripts/archinstall.sh"]="0:0:755"
-  ["/root/scripts/yay_install.sh"]="0:0:755"
+  ["/root/ArchScripts/config.sh"]="0:0:755"
+  ["/root/ArchScripts/expand_cowsize.sh"]="0:0:755"
+  ["/root/ArchScripts/arch_install.sh"]="0:0:755"
+  ["/root/ArchScripts/yay_install.sh"]="0:0:755"
 )
