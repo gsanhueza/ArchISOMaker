@@ -17,8 +17,7 @@ A custom Arch Linux ISO Maker (Just a bunch of scripts).
 
 ### Updating this repository (and the submodule)
 
-* Run `git pull`
-* Run `git submodule update --remote --recursive`
+* Run `git pull --recurse-submodules`
 
 ## Introduction
 
@@ -37,7 +36,7 @@ wiki instructions.
 
 You need to have `archiso` installed in your system to use this script, and a
 working internet connection to pull the packages that we'll embed into the ISO.
-The embedded packages are specified in `airootfs/root/ArchScripts/packages.sh`, will be
+The embedded packages are detected using `detect_packages.sh`, will be
 downloaded in `airootfs/root/pkg`, and will be automatically updated when
 you run `build.sh` (the ISO-building script).
 
@@ -61,20 +60,3 @@ When you boot it, you'll be greeted by a welcome message that hints you the
 necessary steps that you have to follow, so you can run the installation
 script (`install.sh`).
 
-## Available packages by default
-
-### Desktop environments
-* KDE (Plasma)
-* GNOME (GNOME Shell)
-* i3 (Window manager)
-* X11 (Minimal Xorg)
-
-### Bootloaders
-* rEFInd
-* GRUB
-
-### Graphic drivers
-* nVidia
-* AMD
-* VirtualBox
-* Intel
