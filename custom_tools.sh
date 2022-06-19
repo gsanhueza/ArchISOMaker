@@ -85,5 +85,6 @@ wrap_up() {
 
     rm ${work_dir} -rf
     rm ${temp_mnt} -rf
-    chown $OWNER ${out_dir}/*.iso -v
+    chown $OWNER:$OWNER ${out_dir}/*.iso -v
+    mv ${out_dir}/* .. -v
 }

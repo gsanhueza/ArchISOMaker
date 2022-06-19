@@ -13,7 +13,7 @@ A custom Arch Linux ISO Maker (Just a bunch of scripts).
 ### Generating the ISO file
 
 * Run `$ sudo ./build.sh -v`
-* Get the ISO file in the `out` directory of this repository.
+* Get the ISO file in the *parent* directory of this repository.
 
 ### Updating this repository (and the submodule)
 
