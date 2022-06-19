@@ -1,7 +1,6 @@
 #!/bin/bash
 
 script_path=$(readlink -f ${0%/*})
-source "${script_path}/airootfs/root/ArchScripts/packages.sh"
 
 # Custom variables
 work_dir="work"
@@ -41,6 +40,7 @@ make_folder() {
 # See packages.sh
 make_download() {
     echo "Downloading packages..."
+    source "detect_packages.sh"
 
     pacman -Syw --root ${temp_mnt} --cachedir ${custom_pkg_dir} --noconfirm $ALL_PACKAGES
 }

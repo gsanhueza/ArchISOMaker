@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # Custom tools
-source "customtools.sh"
+source "custom_tools.sh"
 
 # On failure, immediately stop building the ISO
 set -e -u
