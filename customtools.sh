@@ -42,7 +42,7 @@ make_folder() {
 make_download() {
     echo "Downloading packages..."
 
-    pacman -Syw --root ${temp_mnt} --cachedir ${custom_pkg_dir} --noconfirm $ALL
+    pacman -Syw --root ${temp_mnt} --cachedir ${custom_pkg_dir} --noconfirm $ALL_PACKAGES
 }
 
 # Create Pacman DB
