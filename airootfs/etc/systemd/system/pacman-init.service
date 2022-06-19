@@ -1,10 +1,5 @@
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
-
 [Unit]
 Description=Initializes Pacman keyring
-Wants=haveged.service
-After=haveged.service
 Requires=etc-pacman.d-gnupg.mount
 After=etc-pacman.d-gnupg.mount
 
@@ -12,7 +7,7 @@ After=etc-pacman.d-gnupg.mount
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/bin/pacman-key --init
-ExecStart=/usr/bin/pacman-key --populate archlinux
+ExecStart=/usr/bin/pacman-key --populate
 
 [Install]
 WantedBy=multi-user.target
