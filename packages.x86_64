@@ -6,7 +6,6 @@ b43-fwcutter
 base
 bind
 brltty
-broadcom-wl
 btrfs-progs
 clonezilla
 cloud-init
@@ -123,9 +122,9 @@ zsh
 xorg
 xorg-xinit
 xorg-drivers
-xterm
+alacritty
 i3
-dmenu
 feh
+dmenu
 gparted
 mesa-utils
