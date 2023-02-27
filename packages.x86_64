@@ -6,6 +6,7 @@ b43-fwcutter
 base
 bind
 brltty
+broadcom-wl
 btrfs-progs
 clonezilla
 cloud-init
@@ -59,6 +60,7 @@ man-pages
 mc
 mdadm
 memtest86+
+memtest86+-efi
 mkinitcpio
 mkinitcpio-archiso
 mkinitcpio-nfs-utils
