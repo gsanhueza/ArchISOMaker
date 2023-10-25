@@ -60,3 +60,10 @@ When you boot it, you'll be greeted by a welcome message that hints you the
 necessary steps that you have to follow, so you can run the installation
 script (`install.sh`).
 
+##Offline Installation Keyring Issue:
+
+Before running `install.sh` first run the following command otherwise all package installs will fail.
+```
+sudo pacman-key --init; sudo pacman-key --populate; sudo pacman-key --lsign cachyos
+```
+
