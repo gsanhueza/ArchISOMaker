@@ -52,10 +52,10 @@ make_database() {
     n=0
 
     # If the command didn't run correctly, re-run. It solves the file-not-found error. Go figure.
-    # We'll re-run the command up to 5 times.
-    until [ $n -ge 5 ]
+    # We'll re-run the command up to 3 times.
+    until [ $n -ge 3 ]
     do
-        repo-add -R -n ${custom_pkg_dir}/custom.db.tar.gz ${custom_pkg_dir}/*pkg.tar.{xz,zst} && break  # If command ran ok, don't re-run
+        repo-add -R -n ${custom_pkg_dir}/custom.db.tar.gz ${custom_pkg_dir}/*pkg.tar.zst && break  # If command ran ok, don't re-run
         n=$[$n+1]
         sleep 1
     done
