@@ -1,6 +1,6 @@
 echo "********************************************************************"
 echo "*                                                                  *"
-echo "*   Welcome to Gabriel's Custom Arch ISO!                          *"
+echo "*   Welcome to Gabriel's custom ArchLinux ISO!                     *"
 echo "*                                                                  *"
 echo "*   Useful commands:                                               *"
 echo "*   (Note: Replace /dev/sdaX with your disk/partition)             *"
