@@ -25,3 +25,6 @@ yellow = "#feff00"
 [colors.primary]
 background = "#000000"
 foreground = "#ffffff"
+
+[window]
+startup_mode = "Maximized"
