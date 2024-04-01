@@ -27,6 +27,6 @@ file_permissions=(
   ["/root/install.sh"]="0:0:755"
   ["/root/ArchScripts/config.sh"]="0:0:755"
   ["/root/ArchScripts/expand_cowsize.sh"]="0:0:755"
-  ["/root/ArchScripts/arch_install.sh"]="0:0:755"
+  ["/root/ArchScripts/install.sh"]="0:0:755"
   ["/root/ArchScripts/yay_install.sh"]="0:0:755"
 )
