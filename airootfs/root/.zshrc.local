@@ -7,3 +7,14 @@ function hidpi_x11()
     cp /root/.xinitrc.hidpi /root/.xinitrc -v
     cp /root/.Xresources.hidpi /root/.Xresources -v
 }
+
+function expand_cowsize()
+{
+    # Expands the available space in the live ISO,
+    # in case you absolutely need to install something heavier than 256 MB,
+    # like a web browser (for emergency use).
+
+    SIZE=${1:-4}G
+    echo ">> Expanding Live ISO space to $SIZE ... <<"
+    mount -v -o remount,size=$SIZE /run/archiso/cowspace
+}

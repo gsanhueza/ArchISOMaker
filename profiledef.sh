@@ -26,7 +26,6 @@ file_permissions=(
   ["/usr/local/bin/livecd-sound"]="0:0:755"
   ["/root/install.sh"]="0:0:755"
   ["/root/ArchScripts/config.sh"]="0:0:755"
-  ["/root/ArchScripts/expand_cowsize.sh"]="0:0:755"
   ["/root/ArchScripts/install.sh"]="0:0:755"
   ["/root/ArchScripts/yay_install.sh"]="0:0:755"
 )
