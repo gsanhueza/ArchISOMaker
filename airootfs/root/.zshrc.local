@@ -1,0 +1,9 @@
+function hidpi_x11()
+{
+    # Enables HiDPI, so when starting the
+    # embedded i3 window manager, you can use the
+    # terminal and GParted with bigger fonts.
+
+    cp /root/.xinitrc.hidpi /root/.xinitrc -v
+    cp /root/.Xresources.hidpi /root/.Xresources -v
+}
