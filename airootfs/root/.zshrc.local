@@ -8,7 +8,7 @@ function hidpi_x11()
     cp /root/.Xresources.hidpi /root/.Xresources -v
 }
 
-function expand_cowsize()
+function cowsize_expand()
 {
     # Expands the available space in the live ISO,
     # in case you absolutely need to install something heavier than 256 MB,
