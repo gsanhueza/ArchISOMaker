@@ -4,8 +4,9 @@ function hidpi_x11()
     # embedded i3 window manager, you can use the
     # terminal and GParted with bigger fonts.
 
-    cp /root/.xinitrc.hidpi /root/.xinitrc -v
-    cp /root/.Xresources.hidpi /root/.Xresources -v
+    echo ">> Setting HiDPI environment ... <<"
+    sed -i "s/\#export/export/g" ~/.xinitrc
+    sed -i "s/\#Xft/Xft/g" ~/.Xresources
 }
 
 function cowsize_expand()
