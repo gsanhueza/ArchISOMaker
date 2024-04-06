@@ -31,9 +31,9 @@ The installation scripts are currently in a separate repository at https://githu
 
 ## Building your ISO
 
-You need to have `archiso` installed in your system to use this script, and a working internet connection to pull the packages that we'll embed into the ISO. The embedded packages are detected using `detect_packages.sh`, will be downloaded in `airootfs/root/pkg`, and will be automatically updated when you run `build.sh` (the ISO-building script).
+You need to have `archiso` installed in your system to use this script, and a working internet connection to pull the packages that we'll embed into the ISO. The embedded packages are detected using `utilities/detect_packages.sh`, will be downloaded in `airootfs/root/pkg`, and will be automatically updated when you run `build.sh` (the ISO-building script).
 
-If you don't want to auto-update the packages when running the script, edit `customtools.sh` and change the *UPDATECACHE* variable to 0.
+If you don't want to auto-update the packages when running the script, edit `utilities/custom_tools.sh` and change the *UPDATE_CACHE* variable to 0.
 
 ## Testing your ISO
 

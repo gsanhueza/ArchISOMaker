@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-BASEDIR=$(dirname "$0")
-source "${BASEDIR}/banned_recipes.sh"
+BASE_DIR=`dirname $(readlink -f $0)`
+source "${BASE_DIR}/utilities/directories.sh"
+source "${BASE_DIR}/utilities/banned_recipes.sh"
 
-RECIPES_DIR="airootfs/root/ArchScripts/recipes"
 ALL_PACKAGES=""
 
 for path in $(find ${RECIPES_DIR} -name "*.sh")
