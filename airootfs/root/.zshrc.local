@@ -21,15 +21,3 @@ function cowsize_expand()
     echo ">> Expanding Live ISO space to $SIZE ... <<"
     mount -v -o remount,size=$SIZE /run/archiso/cowspace
 }
-
-function faster_pacman()
-{
-    # Enables color output and parallel downloads to pacman.
-    # Additionally, updates the CacheDir variable to use our /root/pkg directory.
-    # As a recommendation, select faster mirrors in the /etc/pacman.d/mirrorlist file.
-
-    echo ">> Improving pacman's performance ... <<"
-    sed -i "s/\#Color/Color/g" /etc/pacman.conf
-    sed -i "s/\#ParallelDownloads/ParallelDownloads/g" /etc/pacman.conf
-    sed -i "s/\#CacheDir.*/CacheDir     = \/root\/pkg/g" /etc/pacman.conf
-}
