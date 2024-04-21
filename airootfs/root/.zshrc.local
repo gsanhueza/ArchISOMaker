@@ -1,21 +1,33 @@
+# These functions are utilities added for convenience.
+# They are not required, but you might find them useful
+# when playing with the live ISO.
+
 function hidpi_x11()
 {
-    # Enables HiDPI, so when starting the
-    # embedded i3 window manager, you can use the
-    # terminal and GParted with bigger fonts.
+    # Enables HiDPI, so when starting the embedded i3 window manager,
+    # you can use the terminal and GParted with bigger fonts.
 
-    echo ">> Setting HiDPI environment ... <<"
+    echo ">> Enabling HiDPI environment ... <<"
     sed -i "s/\#export/export/g" ~/.xinitrc
     sed -i "s/\#Xft/Xft/g" ~/.Xresources
 }
 
 function cowsize_expand()
 {
-    # Expands the available space in the live ISO,
-    # in case you absolutely need to install something heavier than 256 MB,
-    # like a web browser (for emergency use).
+    # Expands the available space in the live ISO, in case you absolutely need to
+    # install something heavier than 256 MB, like a web browser (for emergency use).
 
     SIZE=${1:-4}G
     echo ">> Expanding Live ISO space to $SIZE ... <<"
     mount -v -o remount,size=$SIZE /run/archiso/cowspace
+}
+
+function faster_pacman()
+{
+    # Enables color output and parallel downloads to pacman.
+    # I'd recommend you to select faster mirrors in the /etc/pacman.d/mirrorlist file.
+
+    echo ">> Enabling parallel downloads for pacman ... <<"
+    sed -i "s/\#Color/Color/g" /etc/pacman.conf
+    sed -i "s/\#ParallelDownloads/ParallelDownloads/g" /etc/pacman.conf
 }
