@@ -1,0 +1,13 @@
+# remove from airootfs!
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = networkmanager
+
+[Action]
+Description = Enabling NetworkManager service...
+When = PostTransaction
+Depends = systemd
+Depends = networkmanager
+Exec = /usr/bin/systemctl enable NetworkManager.service

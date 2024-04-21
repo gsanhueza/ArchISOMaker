@@ -1,0 +1,13 @@
+# remove from airootfs!
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = reflector
+
+[Action]
+Description = Masking reflector service...
+When = PostTransaction
+Depends = systemd
+Depends = reflector
+Exec = /usr/bin/systemctl mask reflector.service
