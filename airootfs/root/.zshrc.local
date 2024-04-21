@@ -25,9 +25,11 @@ function cowsize_expand()
 function faster_pacman()
 {
     # Enables color output and parallel downloads to pacman.
-    # I'd recommend you to select faster mirrors in the /etc/pacman.d/mirrorlist file.
+    # Additionally, updates the CacheDir variable to use our /root/pkg directory.
+    # As a recommendation, select faster mirrors in the /etc/pacman.d/mirrorlist file.
 
-    echo ">> Enabling parallel downloads for pacman ... <<"
+    echo ">> Improving pacman's performance ... <<"
     sed -i "s/\#Color/Color/g" /etc/pacman.conf
     sed -i "s/\#ParallelDownloads/ParallelDownloads/g" /etc/pacman.conf
+    sed -i "s/\#CacheDir.*/CacheDir     = \/root\/pkg/g" /etc/pacman.conf
 }
