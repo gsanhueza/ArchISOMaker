@@ -1,23 +1,11 @@
 # ArchISOMaker
 
-A custom Arch Linux ISO Maker (Just a bunch of scripts).
+A custom Arch Linux ISO Maker.
 
-## Instructions
-
-### Retrieving this repository
-
-* Clone this repo.
-* Initialize submodules (`git submodule init`)
-* Update submodules (`git submodule update`)
-
-### Generating the ISO file
+## Instructions (Generating the ISO file)
 
 * Run `$ sudo ./build.sh -v`
 * Get the ISO file in the *parent* directory of this repository.
-
-### Updating this repository (and the submodule)
-
-* Run `git submodule update --recursive --remote`
 
 ## Introduction
 
@@ -27,7 +15,7 @@ Additionally, a custom installation script is also embedded in the ISO, so you c
 
 ## Checking out the installation scripts
 
-The installation scripts are currently in a separate repository at https://github.com/gsanhueza/ArchScripts , and they can be used here by managing the git submodule (see instructions above).
+The installation scripts are found in a separate repository at https://github.com/gsanhueza/ArchScripts, which is automatically cloned when running the `build.sh` script for the first time, and automatically updated in subsequent executions of the script.
 
 ## Building your ISO
 
@@ -41,8 +29,8 @@ The generated ISO comes with virtualbox drivers, so you can setup a VirtualBox m
 
 Alternatively, `archiso` provides a convenient method that uses QEMU:
 
-- `run_archiso -i path/to/an/arch.iso` to run as BIOS
-- `run_archiso -u -i path/to/an/arch.iso` to run as UEFI
+- `run_archiso -i path/to/an/arch.iso` to run as BIOS.
+- `run_archiso -u -i path/to/an/arch.iso` to run as UEFI.
 
 ## Installing your system
 
