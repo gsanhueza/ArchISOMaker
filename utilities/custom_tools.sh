@@ -2,6 +2,7 @@
 
 BASE_DIR=`dirname $(readlink -f $0)`
 DETECTOR_PATH="${BASE_DIR}/utilities/detect_packages.sh"
+ARCHSCRIPTS_GIT="https://github.com/gsanhueza/ArchScripts.git"
 
 # Whether to update cache every time, or keep what's available now.
 UPDATE_CACHE=1
@@ -12,6 +13,18 @@ run_once() {
         $1
         touch ${WORK_DIR}/build.${1}
     fi
+}
+
+# Update ArchScripts
+update_archscripts() {
+    OWNER=${SUDO_USER:-$USER}
+
+    # Ensure ArchScripts are available first
+    if [ ! -d ${BASE_DIR}/airootfs/root/ArchScripts ]; then
+        sudo -u ${OWNER} git clone ${ARCHSCRIPTS_GIT} ${BASE_DIR}/airootfs/root/ArchScripts
+    fi
+
+    sudo -u ${OWNER} git -C ${BASE_DIR}/airootfs/root/ArchScripts pull
 }
 
 # Create needed folders for make_local_repo

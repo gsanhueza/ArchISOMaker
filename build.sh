@@ -15,11 +15,13 @@ set -e -u
 # Make ${WORK_DIR} directory
 mkdir -p "${WORK_DIR}"
 
+# Update ArchScripts
+run_once update_archscripts
+
 # Generate local repo
 run_once make_local_repo
 
 # Run mkarchiso
-#printf '\n[%s] WARNING: %s\n\n' "mkarchiso" "build.sh scripts are deprecated! Please use mkarchiso directly." >&2
 mkarchiso "$@" "${BASE_PATH%/*}"
 
 # Remove ${WORK_DIR} folder
