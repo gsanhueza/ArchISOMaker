@@ -2,20 +2,20 @@
 # They are not required, but you might find them useful
 # when playing with the live ISO.
 
-function hidpi_x11()
+function hidpi_on()
 {
-    # Enables HiDPI, so when starting the embedded i3 window manager,
-    # you can use the terminal and GParted with bigger fonts.
+    # Enables HiDPI, so when starting SwayWM, you can
+    # use the terminal and GParted with bigger fonts.
 
     echo ">> Enabling HiDPI environment ... <<"
-    sed -i "s/\#export/export/g" ~/.xinitrc
-    sed -i "s/\#Xft/Xft/g" ~/.Xresources
+    sed -i "s/\#output/output/g" ~/.config/sway/config
 }
 
 function cowsize_expand()
 {
-    # Expands the available space in the live ISO, in case you absolutely need to
-    # install something heavier than 256 MB, like a web browser (for emergency use).
+    # Expands the available space in the live ISO,
+    # in case you absolutely need to install something
+    # heavier than 256 MB, like a web browser.
 
     SIZE=${1:-4}G
     echo ">> Expanding Live ISO space to $SIZE ... <<"

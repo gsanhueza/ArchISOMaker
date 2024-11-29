@@ -1,0 +1,17 @@
+include /etc/sway/config
+
+# HIDPI
+#output * scale 2
+
+# Background
+output * bg /root/.instructionsgui.png fill
+
+# Shortcuts
+bindsym $mod+G exec gparted
+
+# Touchpad
+input type:touchpad {
+    tap enabled
+    natural_scroll enabled
+}
+
