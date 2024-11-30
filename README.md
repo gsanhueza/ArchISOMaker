@@ -7,11 +7,21 @@ A custom Arch Linux ISO Maker.
 * Run `$ sudo ./build.sh -v`
 * Get the ISO file in the *parent* directory of this repository.
 
-## Introduction
+## Description
 
 This is a script collection based on [archiso](https://gitlab.archlinux.org/archlinux/archiso/), which allows you to build your own Arch Linux ISO. The main difference from upstream is that this variant pulls the most updated ArchLinux packages and embeds them in the ISO file. This means that you do not need to have an internet connection anymore when *installing* Arch Linux from this ISO.
 
 Additionally, a custom installation script is also embedded in the ISO, so you can install a *standard* version of Arch Linux non-interactively . Of course, you are not forced to use it, if you want to manually install Arch Linux following the wiki instructions.
+
+## Requirements
+
+You need to have `archiso` installed to be able to use this.
+
+If you are already using ArchLinux and you want to create an ISO for future usage, you can install it with `sudo pacman -S archiso`.
+
+If you are using another distribution, you can try installing `archiso` using the link in the description, or use either `systemd-nspawn` or `distrobox` to bootstrap a minimal ArchLinux installation and cloning this repository inside.
+
+If you come from Windows and you want to make an updated ISO with this tool, you can try using [Arch-WSL](https://github.com/VSWSL/Arch-WSL) and cloning this repository inside.
 
 ## Checking out the installation scripts
 
