@@ -4,7 +4,7 @@ include /etc/sway/config
 #output * scale 2
 
 # Background
-output * bg /root/.instructionsgui.png fill
+output * bg /root/.instructionsgui.png fit
 
 # Shortcuts
 bindsym $mod+G exec gparted
