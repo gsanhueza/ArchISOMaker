@@ -10,4 +10,4 @@ Description = Improving pacman's performance in live ISO...
 When = PostTransaction
 Depends = pacman
 Depends = sed
-Exec = /usr/bin/sed -i -e "s/\#Color/Color/g" -e "s/\#ParallelDownloads/ParallelDownloads/g" -e "s/\#CacheDir.*/CacheDir     = \/root\/pkg/g" /etc/pacman.conf
+Exec = /usr/bin/sed -i -e "s/\#Color/Color/g" -e "s/\#ParallelDownloads/ParallelDownloads/g" -e "s/\#CacheDir.*/CacheDir     = \/root\/pkg/g" -e "s/DownloadUser/\#DownloadUser/g" /etc/pacman.conf
