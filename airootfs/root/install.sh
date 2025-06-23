@@ -2,6 +2,5 @@
 
 # Execute true script
 cd ArchScripts/
-./install.sh
+./setup.sh
 cd ..
-
