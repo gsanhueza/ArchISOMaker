@@ -24,7 +24,7 @@ update_archscripts() {
         sudo -u ${OWNER} git clone ${ARCHSCRIPTS_GIT} ${BASE_DIR}/airootfs/root/ArchScripts
     fi
 
-    sudo -u ${OWNER} git -C ${BASE_DIR}/airootfs/root/ArchScripts pull
+    sudo -u ${OWNER} git -C ${BASE_DIR}/airootfs/root/ArchScripts pull --rebase
 }
 
 # Create needed folders for make_local_repo
