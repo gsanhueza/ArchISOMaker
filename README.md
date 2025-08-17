@@ -33,6 +33,36 @@ You need to have `archiso` installed in your system to use this script, and a wo
 
 If you don't want to auto-update the packages when running the script, edit `utilities/custom_tools.sh` and change the *UPDATE_CACHE* variable to 0.
 
+### Handling "Permission Denied" errors
+
+It's possible that running the `build.sh` script fails with a "Permission Denied" error, like:
+
+`error: could not open file <my_dir>/TEMPMNT/var/lib/pacman/sync/download-<hash>/custom.db.part: Permission denied`
+
+This happens because your host system is trying to use the default `alpm` user to download the packages, which will fail, as you needed to use `sudo` to run this script, and the temporal mount point is owned by `root`.
+
+As a workaround, you can edit the host's `/etc/pacman.conf` file, and comment the `DownloadUser = alpm` line.
+
+```bash
+gabriel@arch % cat /etc/pacman.conf
+#
+# /etc/pacman.conf
+#
+# See the pacman.conf(5) manpage for option and repository directives
+
+# < some text here >
+
+# Misc options
+#UseSyslog
+Color
+#NoProgressBar
+CheckSpace
+#VerbosePkgLists
+ParallelDownloads = 10
+#DownloadUser = alpm  <--- Comment this line, so it does not use the `alpm` user
+#DisableSandbox
+```
+
 ## Testing your ISO
 
 The generated ISO comes with virtualbox drivers, so you can setup a VirtualBox machine and run your ISO there.
