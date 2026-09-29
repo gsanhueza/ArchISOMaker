@@ -69,7 +69,7 @@ The generated ISO comes with virtualbox drivers, so you can setup a VirtualBox m
 
 Alternatively, `archiso` provides a convenient method that uses QEMU:
 
-- `run_archiso -i path/to/an/arch.iso` to run as BIOS.
+- `run_archiso -b -i path/to/an/arch.iso` to run as BIOS.
 - `run_archiso -u -i path/to/an/arch.iso` to run as UEFI.
 
 ## Installing your system
